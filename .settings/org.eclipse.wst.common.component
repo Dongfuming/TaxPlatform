@@ -3,6 +3,8 @@
     <wb-module deploy-name="TaxPlatform">
         <wb-resource deploy-path="/" source-path="/WebRoot"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/config"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/test"/>
         <property name="context-root" value="/TaxPlatform"/>
         <property name="java-output-path" value="/TaxPlatform/WebRoot/WEB-INF/classes"/>
     </wb-module>

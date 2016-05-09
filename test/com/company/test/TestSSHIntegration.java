@@ -2,14 +2,11 @@ package com.company.test;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
 import com.company.test.entity.Person;
 import com.company.test.service.TestService;
-import com.company.test.service.impl.TestServiceImpl;
 
 /**
  * 测试SSH框架整合
@@ -31,9 +28,12 @@ public class TestSSHIntegration {
 		testService.testFunc();
 	}
 	
+	@Test
 	public void testSpringAndStruts() {
+		System.out.println("testSpringAndStruts");
 		// 在浏览器输入: http://localhost:8080/TaxPlatform/test.action 
-		// 查看后台是否能输入service中的testFuncy方法中的打印信息
+		// 查看后台是否能输入service中的testFunc方法中的打印信息
+		// System.out.println("test service implementation class");
 	}
 	
 	@Test
@@ -42,7 +42,7 @@ public class TestSSHIntegration {
 		Session session = factory.openSession();
 		session.beginTransaction();
 		
-		Person p1 = new Person("person001");
+		Person p1 = new Person("person007");
 		session.save(p1);
 		
 		session.getTransaction().commit();
@@ -68,10 +68,6 @@ public class TestSSHIntegration {
 	@Test
 	public void testTransactionRollback() {
 		TestService testService = (TestService)context.getBean("testService");
-		testService.savePerson(new Person("不应该出现"));
-	}
-	
-	public void testAny() {
-		System.out.println(".....");
+		testService.savePerson(new Person("不应该出现2"));
 	}
 }

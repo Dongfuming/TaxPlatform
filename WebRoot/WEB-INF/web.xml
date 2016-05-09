@@ -27,9 +27,7 @@
 	
 	
 	
-	
-	
-  <display-name></display-name>	
+  <display-name>TaxPlatform</display-name>	
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
