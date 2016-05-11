@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
+import com.company.core.action.BaseAction;
 import com.company.tax.user.entity.User;
 import com.company.tax.user.service.UserService;
 import com.opensymphony.xwork2.Action;
@@ -22,13 +23,12 @@ import com.opensymphony.xwork2.ActionSupport;
  * @date 2016-5-9 下午1:51:26
  */
 @SuppressWarnings("serial")
-public class UserAction extends ActionSupport {
+public class UserAction extends BaseAction {
 	
 	@Resource
 	private UserService userService;
 	private List<User> userList; // 界面显示的用户列表
 	private User user; // 新增、编辑、删除的用户
-	private String[] selectedRow; // 删除选中的行
 	
 	private File headImg; // 页面file表单域中对应的名称
 	private String headImgContentType; 
@@ -122,7 +122,7 @@ public class UserAction extends ActionSupport {
 			//1、获取帐号
 			if(user != null && StringUtils.isNotBlank(user.getAccount())){
 				//2、根据帐号到数据库中校验是否存在该帐号对应的用户
-				System.out.println("xxxxx = " + user);
+				// 如果是编辑的话，应把当前记录排除后再查看是否有重复账号，所以把id传入查询
 				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getAccount());
 				System.out.println("list.length = " + list.size());
 				String unique = "true";
@@ -170,12 +170,6 @@ public class UserAction extends ActionSupport {
 	}
 	public List<User> getUserList() {
 		return userList;
-	}
-	public void setSelectedRow(String[] selectedRow) {
-		this.selectedRow = selectedRow;
-	}
-	public String[] getSelectedRow() {
-		return selectedRow;
 	}
 	public File getHeadImg() {
 		return headImg;
