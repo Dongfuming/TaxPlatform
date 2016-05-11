@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="UserPackage" extends="struts-default" namespace="/tax">
+		<action name="*" class="com.company.tax.user.action.UserAction" method="{1}">
+			<result name="listUser">/WEB-INF/jsp/user/list.jsp</result>
+			
+			<result name="toAddUserPage">/WEB-INF/jsp/user/add.jsp</result>
+			
+			<result name="addUserSuccess" type="redirectAction">listUser</result>
+			
+			<result name="toEditUserPage">/WEB-INF/jsp/user/edit.jsp</result>
+
+			<result name="editUserSuccess" type="redirectAction">listUser</result>
+			
+			<result name="deleteUserSuccess" type="redirectAction">listUser</result>
+
+			<result name="deleteSelectedUserSuccess" type="redirectAction">listUser</result>
+
+			<result name="importUserSuccess" type="redirectAction">listUser</result>
+			
+		</action>
+	</package>
+	
+
+</struts>

@@ -1,10 +1,7 @@
 package com.company.test.dao.impl;
 
 import java.io.Serializable;
-
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
-import org.springframework.stereotype.Repository;
-
 import com.company.test.dao.TestDao;
 import com.company.test.entity.Person;
 

@@ -14,5 +14,6 @@
 	<constant name="struts.ui.theme" value="simple" />
 
 	<include file="com/company/test/config/test-struts.xml"/>	
+	<include file="com/company/tax/user/config/user-struts.xml"></include>
 
 </struts>

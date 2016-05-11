@@ -19,6 +19,6 @@ public class TestAction extends ActionSupport {
 	
 	public String execute() throws Exception {
 		testService.testFunc();
-		return Action.SUCCESS;
+		return "success";
 	}
 }

@@ -16,6 +16,6 @@
 	<bean id="testDao" class="com.company.test.dao.impl.TestDaoImpl">
     	<property name="sessionFactory" ref="sessionFactory"></property>
     </bean>
-    
+
 </beans>
   

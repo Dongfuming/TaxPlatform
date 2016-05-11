@@ -9,11 +9,10 @@
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     
     
-    
-    
-    
     <!-- 引入外部sprign配置文件 -->
-    <import resource="classpath:com/company/*/config/*-spring.xml" />
+    <import resource="classpath:com/company/test/config/test-spring.xml" />
+    <import resource="classpath:com/company/tax/user/config/user-spring.xml" />
+    
     
     <!-- 配置c3p0数据库连接源 -->
     <!-- 导入外部的properties配置文件 -->
@@ -43,7 +42,7 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
 				<prop key="hibernate.format_sql">true</prop>  
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
 				<prop key="javax.persistence.validation.mode">none</prop>
@@ -57,6 +56,7 @@
 		<property name="mappingLocations">
 			<list>
 				<value>classpath:com/company/test/entity/*.hbm.xml</value>
+				<value>classpath:com/company/tax/user/entity/*.hbm.xml</value>
 			</list>
 		</property>
 	</bean>

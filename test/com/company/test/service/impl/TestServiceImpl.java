@@ -17,7 +17,7 @@ import com.company.test.service.TestService;
 public class TestServiceImpl implements TestService {
 
 	@Resource
-	TestDao testDao;
+	private TestDao testDao;
 	
 	@Override
 	public void testFunc() {
@@ -29,6 +29,7 @@ public class TestServiceImpl implements TestService {
 		boolean success = testDao.savePerson(person);
 		System.out.println("save 操作");
 		int i = 1 / 0;  // 遇到异常，回滚
+		System.out.println(i);
 		testDao.savePerson(new Person("不应该出现"));
 		
 		return success;
