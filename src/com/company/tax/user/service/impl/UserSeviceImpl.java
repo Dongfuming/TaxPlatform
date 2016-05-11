@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
+import com.company.core.exception.ServiceException;
 import com.company.core.util.ExcelUtil;
 import com.company.tax.user.dao.UserDao;
 import com.company.tax.user.entity.User;
@@ -53,8 +54,7 @@ public class UserSeviceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> findUsers() {
-		System.out.println("userDao = " + userDao.getClass().getSimpleName());
+	public List<User> findUsers() throws ServiceException {
 		return userDao.findObjects();
 	}
 

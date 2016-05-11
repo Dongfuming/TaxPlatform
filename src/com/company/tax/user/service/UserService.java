@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 import javax.servlet.ServletOutputStream;
+
+import com.company.core.exception.ServiceException;
 import com.company.tax.user.entity.User;
 
 /**
@@ -20,7 +22,7 @@ public interface UserService {
 
 	public User findUserById(Serializable id);
 
-	public List<User> findUsers();
+	public List<User> findUsers() throws ServiceException;
 	
 	public void exportUserExcel(List<User> userList, ServletOutputStream outputStream);
 	

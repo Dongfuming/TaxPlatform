@@ -5,7 +5,7 @@
 
 <struts>
 
-	<package name="UserPackage" extends="struts-default" namespace="/tax">
+	<package name="user-package" extends="base-package" namespace="/tax">
 		<action name="*" class="com.company.tax.user.action.UserAction" method="{1}">
 			<result name="listUser">/WEB-INF/jsp/user/list.jsp</result>
 			

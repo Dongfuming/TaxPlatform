@@ -16,4 +16,26 @@
 	<include file="com/company/test/config/test-struts.xml"/>	
 	<include file="com/company/tax/user/config/user-struts.xml"></include>
 
+	<!-- 配置全局结果及异常映射 -->
+	<package name="base-package" extends="struts-default">
+		<!-- 返回结果类型 -->
+		<result-types>
+			<result-type name="systemErrorType" class="com.company.core.action.SystemResultAction"></result-type>
+		</result-types>
+		
+		<!-- 全局返回结果 -->
+		<global-results>
+			<result name="error" type="systemErrorType">/WEB-INF/jsp/error.jsp</result>
+			<result name="systemError">/WEB-INF/jsp/error.jsp</result>
+			<result name="input">/WEB-INF/jsp/error.jsp</result>
+		</global-results>
+		
+		<!-- 全局异常映射 -->
+		<global-exception-mappings>
+			<exception-mapping result="systemError" exception="com.company.core.exception.SystemException"></exception-mapping>
+			<exception-mapping result="input" exception="java.lang.Exception"></exception-mapping>
+		</global-exception-mappings>
+	</package>
+	
+	
 </struts>

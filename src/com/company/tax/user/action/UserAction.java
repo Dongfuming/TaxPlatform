@@ -13,6 +13,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.company.core.action.BaseAction;
+import com.company.core.exception.ActionException;
+import com.company.core.exception.ServiceException;
 import com.company.tax.user.entity.User;
 import com.company.tax.user.service.UserService;
 import com.opensymphony.xwork2.Action;
@@ -43,9 +45,13 @@ public class UserAction extends BaseAction {
 		return Action.SUCCESS;
 	}
 	
-	public String listUser() { // 查
-		userList = userService.findUsers();
-		System.out.println("userList.length = " + userList.size());
+	public String listUser() throws ActionException { // 查
+		try {
+			userList = userService.findUsers();
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			throw new ActionException("请求操作失败。" + e.getMessage());
+		}
 		return "listUser";
 	}
 	
