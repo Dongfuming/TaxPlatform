@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<package name="role-package" extends="base-package" namespace="/tax/role">
+	
+		<action name="*" class="com.company.tax.role.action.RoleAction" method="{1}">
+		
+			<result name="listRole">/WEB-INF/jsp/role/list.jsp</result>
+			
+			<result name="toAddRolePage">/WEB-INF/jsp/role/add.jsp</result>
+			
+			<result name="addRoleSuccess" type="redirectAction">listRole</result>
+			
+			<result name="toEditRolePage">/WEB-INF/jsp/role/edit.jsp</result>
+
+			<result name="editRoleSuccess" type="redirectAction">listRole</result>
+			
+			<result name="deleteRoleSuccess" type="redirectAction">listRole</result>
+
+			<result name="deleteSelectedRoleSuccess" type="redirectAction">listRole</result>
+
+			<result name="importRoleSuccess" type="redirectAction">listRole</result>
+			
+		</action>
+		
+	</package>
+
+</struts>

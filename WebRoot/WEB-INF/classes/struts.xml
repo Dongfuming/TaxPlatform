@@ -12,29 +12,34 @@
 	<constant name="struts.action.extention" value="action" />
 	<!-- 把主题配置成simple -->
 	<constant name="struts.ui.theme" value="simple" />
-
+	
+	<!-- test -->
 	<include file="com/company/test/config/test-struts.xml"/>	
+	<!-- 用户管理 -->
 	<include file="com/company/tax/user/config/user-struts.xml"></include>
+	<!-- 角色管理 -->
+	<include file="com/company/tax/role/config/role-struts.xml"></include>
+	
 
 	<!-- 配置全局结果及异常映射 -->
 	<package name="base-package" extends="struts-default">
 		<!-- 返回结果类型 -->
-		<result-types>
+		<!-- <result-types>
 			<result-type name="systemErrorType" class="com.company.core.action.SystemResultAction"></result-type>
-		</result-types>
+		</result-types> -->
 		
 		<!-- 全局返回结果 -->
-		<global-results>
+		<!-- <global-results>
 			<result name="error" type="systemErrorType">/WEB-INF/jsp/error.jsp</result>
 			<result name="systemError">/WEB-INF/jsp/error.jsp</result>
 			<result name="input">/WEB-INF/jsp/error.jsp</result>
-		</global-results>
+		</global-results> -->
 		
 		<!-- 全局异常映射 -->
-		<global-exception-mappings>
+		<!-- <global-exception-mappings>
 			<exception-mapping result="systemError" exception="com.company.core.exception.SystemException"></exception-mapping>
 			<exception-mapping result="input" exception="java.lang.Exception"></exception-mapping>
-		</global-exception-mappings>
+		</global-exception-mappings> -->
 	</package>
 	
 	

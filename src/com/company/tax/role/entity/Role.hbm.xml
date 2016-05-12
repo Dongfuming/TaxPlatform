@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.company.tax.role.entity">
+	<class name="Role" table="role">
+		<id name="id" type="java.lang.String">
+			<column name="roleId" length="32" />
+			<generator class="uuid" />
+		</id>
+		
+		<property name="name" type="java.lang.String">
+			<column name="name" length="20" not-null="true" />
+		</property>
+		
+		<property name="state" type="java.lang.String">
+			<column name="state" length="1" />
+		</property>
+		
+		<!-- Inverse = true  控制反转； 当前方没有控制权，此时的关联应该通过另一方维护。 -->
+		<set name="rolePrivilegeSet" inverse="true" lazy="false" cascade="save-update,delete">
+			<key column="roleId"></key>
+			<!-- one role to many privilege -->
+			<one-to-many class="RolePrivilege"/>
+		</set>
+	</class>
+</hibernate-mapping>

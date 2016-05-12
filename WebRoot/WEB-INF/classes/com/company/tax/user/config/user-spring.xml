@@ -15,7 +15,7 @@
 	<!-- 因为daoImpl继承了HibernateDaoSupport，需要手动给属性sessionFactory注入数据 -->
 	<bean id="userDao" class="com.company.tax.user.dao.impl.UserDaoImpl">
     	<property name="sessionFactory" ref="sessionFactory"></property>
-    </bean>
+	</bean>
     
 </beans>
   

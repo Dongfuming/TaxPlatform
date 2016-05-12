@@ -24,12 +24,6 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 		// 使用反射得到 T 的真实类型
 		ParameterizedType type = (ParameterizedType)this.getClass().getGenericSuperclass();
 		clazz = (Class<T>)type.getActualTypeArguments()[0];
-		System.out.println("长度 ＝ " + type.getActualTypeArguments().length);
-		for (Type aType : type.getActualTypeArguments()) {
-			System.out.println("当前对象的泛型的父类类型 = " + aType.getClass());
-		}
-		System.out.println("T的真实类型 = " + clazz.getName());
-		System.out.println();
 	}
 	
 	@Override

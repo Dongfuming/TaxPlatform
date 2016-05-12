@@ -8,14 +8,11 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
     
-    <!-- 自动扫描 -->
-	<context:component-scan base-package="com.company.tax.user.service.impl" />
-	<context:component-scan base-package="com.company.tax.user.action" />
-	
-	<!-- 因为daoImpl继承了HibernateDaoSupport，需要手动给属性sessionFactory注入数据 -->
-	<bean id="userDao" class="com.company.tax.user.dao.impl.UserDaoImpl">
+    <bean id="roleDao" class="com.company.tax.role.dao.impl.RoleDaoImpl">
     	<property name="sessionFactory" ref="sessionFactory"></property>
-	</bean>
+    </bean>
+    
+    <!-- 扫描service -->
+    <context:component-scan base-package="com.company.tax.role.service.impl" />
     
 </beans>
-  

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.company.tax.role.entity">
+	<class name="RolePrivilege" table="role_privilege">
+		
+		<composite-id name="compositeRolePrivilege" class="CompositeRolePrivilege">
+			<!-- many privilege to one role -->
+			<key-many-to-one name="role" lazy="false" class="Role">
+				<column name="roleId" ></column>
+			</key-many-to-one>
+			
+			<key-property name="privilege" type="java.lang.String">
+				<column name="privilege" length="20"></column>
+			</key-property>
+			
+		</composite-id>
+	</class>
+</hibernate-mapping>

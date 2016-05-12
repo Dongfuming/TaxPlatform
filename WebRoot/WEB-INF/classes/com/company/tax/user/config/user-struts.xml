@@ -5,7 +5,8 @@
 
 <struts>
 
-	<package name="user-package" extends="base-package" namespace="/tax">
+	<package name="user-package" extends="base-package" namespace="/tax/user">
+	
 		<action name="*" class="com.company.tax.user.action.UserAction" method="{1}">
 			<result name="listUser">/WEB-INF/jsp/user/list.jsp</result>
 			
@@ -24,6 +25,7 @@
 			<result name="importUserSuccess" type="redirectAction">listUser</result>
 			
 		</action>
+		
 	</package>
 	
 
