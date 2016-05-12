@@ -130,7 +130,7 @@ public class UserAction extends BaseAction {
 				//2、根据帐号到数据库中校验是否存在该帐号对应的用户
 				// 如果是编辑的话，应把当前记录排除后再查看是否有重复账号，所以把id传入查询
 				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getAccount());
-				System.out.println("list.length = " + list.size());
+				System.out.println("已存在的" + user.getAccount() + "用户个数 = " + list.size());
 				String unique = "true";
 				if(list != null && list.size() > 0){
 					//说明该帐号已经存在

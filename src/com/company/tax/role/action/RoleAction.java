@@ -21,13 +21,13 @@ public class RoleAction extends BaseAction {
 	
 	@Resource
 	private RoleService roleService;
-	private List<Role> roleList;
-	private Role role;
-	private String[] privilegeIdArray;
+	private List<Role> roleList; // 列表显示
+	private Role role; // 编辑、删除
+	private String[] privilegeIdArray; // 新增角色的权限数组
 	
 	public String listRole() throws Exception {
 		System.out.println("list role action");
-		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP); //加载权限集合
+		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP); // 加载角色权限
 		try {
 			roleList = roleService.findRoles();
 		} catch (Exception e) {
@@ -39,14 +39,21 @@ public class RoleAction extends BaseAction {
 	}
 	
 	public String toAddRolePage() {
-		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP); //加载权限集合
+		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP); // 加载角色权限
 		return "toAddRolePage";
 	}
 	
 	public String addRole() {
 		System.out.println("新增的角色 = " + role);
 		System.out.println("权限 = " + privilegeIdArray);
-		// 保存权限
+		savePrivilegeInRole();
+		roleService.save(role);
+		
+		return "addRoleSuccess";
+	}
+
+	// 保存权限
+	private void savePrivilegeInRole() {
 		HashSet<RolePrivilege> set = new HashSet<RolePrivilege>();
 		for(int i = 0; i < privilegeIdArray.length; i++) {
 			CompositeRolePrivilege composition = new CompositeRolePrivilege(role, privilegeIdArray[i]);
@@ -54,12 +61,41 @@ public class RoleAction extends BaseAction {
 			set.add(rolePrivilege);
 		}
 		role.setRolePrivilegeSet(set);
-		roleService.save(role);
-		
-		return "addRoleSuccess";
 	}
 	
+	public String toEditRolePage() {
+		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP);
+		role = roleService.findRoleById(role.getId());
+		
+		// 处理权限回显
+		privilegeIdArray = new String[role.getRolePrivilegeSet().size()];
+		int i = 0;
+		for(RolePrivilege privilege: role.getRolePrivilegeSet()){
+			privilegeIdArray[i++] = privilege.getCompositeRolePrivilege().getPrivilege();
+		}
+
+		return "toEditRolePage";
+	}
 	
+	public String editRole() {
+		savePrivilegeInRole();
+		roleService.update(role);
+		return "editRoleSuccess";
+	}
+	
+	public String deleteRole() {
+		roleService.delete(role.getId());
+		return "deleteRoleSuccess";
+	}
+
+	public String deleteSelectedRole() {
+		for (String roleId : selectedRow) {
+			roleService.delete(roleId);
+		}
+		return "deleteSelectedRoleSuccess";
+	}
+	
+	/***************** 数据注入 *****************/
 	public void setRoleList(List<Role> roleList) {
 		this.roleList = roleList;
 	}

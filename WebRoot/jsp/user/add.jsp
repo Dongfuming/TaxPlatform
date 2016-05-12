@@ -15,7 +15,7 @@
 	    		if($.trim(account) != "") {
 	    			//2、校验 
 	    			$.ajax({
-	    				url:"${basePath}/tax/verifyUserAccount.action",
+	    				url:"${basePath}/tax/user/verifyUserAccount.action",
 	    				data: {"user.account": account},
 	    				type: "post",
 	    				async: false,//非异步
@@ -24,7 +24,7 @@
 	    						//帐号已经存在
 	    						alert("此帐号已经存在，请使用其它帐号！");
 	    						//定焦
-	    						$("#account").focus();
+	    						$("#account").focus().select();
 	    						unique = false;
 	    					} else {
 	    						unique = true;
@@ -57,7 +57,7 @@
 </head>
 
 <body class="rightBody">
-<form id="form" name="form" action="${basePath }/tax/addUser.action" method="post" enctype="multipart/form-data">
+<form id="form" name="form" action="${basePath }/tax/user/addUser.action" method="post" enctype="multipart/form-data">
     <div class="p_d_1">
         <div class="p_d_1_1">
             <div class="content_info">
@@ -116,7 +116,7 @@
         </tr>
     </table>
     <div class="tc mt20">
-        <input type="submit" class="btnB2" value="保存" onclick="doSubmit()" />
+        <input type="button" class="btnB2" value="保存" onclick="doSubmit()" />
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button"  onclick="javascript:history.go(-1)" class="btnB2" value="返回" />
     </div>

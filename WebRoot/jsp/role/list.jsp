@@ -20,17 +20,17 @@
   	}
   	//编辑
   	function doEdit(id){
-  		document.forms[0].action = "${basePath}nsfw/role_editUI.action?role.roleId=" + id;
+  		document.forms[0].action = "${basePath}/tax/role/toEditRolePage.action?role.id=" + id;
   		document.forms[0].submit();
   	}
   	//删除
   	function doDelete(id){
-  		document.forms[0].action = "${basePath}nsfw/role_delete.action?role.roleId=" + id;
+  		document.forms[0].action = "${basePath}/tax/role/deleteRole.action?role.id=" + id;
   		document.forms[0].submit();
   	}
   	//批量删除
   	function doDeleteAll(){
-  		document.forms[0].action = "${basePath}nsfw/role_deleteSelected.action";
+  		document.forms[0].action = "${basePath}/tax/role/deleteSelectedRole.action";
   		document.forms[0].submit();
   	}
 
@@ -68,7 +68,7 @@
                         <s:if test="roleList != null && roleList.size > 0">
                        		<s:iterator value="roleList" status="st">
                             <tr <s:if test="#st.odd">bgcolor="f8f8f8"</s:if> >
-                                <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='roleId'/>"/></td>
+                                <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='id'/>"/></td>
                                 <td align="center"><s:property value="name"/></td>
                                 <td align="center">
                                 	<s:iterator value="rolePrivilegeSet">
@@ -77,8 +77,9 @@
                                 </td>
                                 <td align="center"><s:property value="state==1?'有效':'无效'"/></td>
                                 <td align="center">
-                                    <a href="javascript:doEdit('<s:property value='roleId'/>')">编辑</a>
-                                    <a href="javascript:doDelete('<s:property value='roleId'/>')">删除</a>
+                                										<!-- 此id是Role里的id属性 -->
+                                    <a href="javascript:doEdit('<s:property value='id'/>')">编辑</a>
+                                    <a href="javascript:doDelete('<s:property value='id'/>')">删除</a>
                                 </td>
                             </tr>
                            </s:iterator>

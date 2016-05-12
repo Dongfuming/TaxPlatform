@@ -17,31 +17,31 @@
 			}
 	      	//新增
 	      	function doAdd(){
-	      		document.forms[0].action = "${basePath}/tax/toAddUserPage.action";
+	      		document.forms[0].action = "${basePath}/tax/user/toAddUserPage.action";
 	      		document.forms[0].submit();
 	      	}
 	      	//编辑
 	      	function doEdit(id){
-	      		document.forms[0].action = "${basePath}/tax/toEditUserPage.action?user.id=" + id;
+	      		document.forms[0].action = "${basePath}/tax/user/toEditUserPage.action?user.id=" + id;
 	      		document.forms[0].submit();
 	      	}
 	      	//删除
 	      	function doDelete(id){
-	      		document.forms[0].action = "${basePath}/tax/deleteUser.action?user.id=" + id;
+	      		document.forms[0].action = "${basePath}/tax/user/deleteUser.action?user.id=" + id;
 	      		document.forms[0].submit();
 	      	}
 	      	//批量删除
 	      	function doDeleteAll(){
-	      		document.forms[0].action = "${basePath}/tax/deleteSelectedUser.action";
+	      		document.forms[0].action = "${basePath}/tax/user/deleteSelectedUser.action";
 	      		document.forms[0].submit();
 	      	}
 	      	//导出用户列表
 	      	function doExportExcel(){
-	      		window.open("${basePath}/tax/exportUserExcel.action");
+	      		window.open("${basePath}/tax/user/exportUserExcel.action");
 	      	}
 	      	//导入
 	      	function doImportExcel(){
-	      		document.forms[0].action = "${basePath}/tax/importUserExcel.action";
+	      		document.forms[0].action = "${basePath}/tax/user/importUserExcel.action";
 	      		document.forms[0].submit();
 	      	}
 	    </script>

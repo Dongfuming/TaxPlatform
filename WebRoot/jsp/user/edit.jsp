@@ -17,7 +17,7 @@
 	    		if($.trim(account) != "") {
 	    			//2、校验 
 	    			$.ajax({
-	    				url:"${basePath}/tax/verifyUserAccount.action",
+	    				url:"${basePath}/tax/user/verifyUserAccount.action",
 	    				data: {"user.account": account, "user.id": "${user.id}"},
 	    				type: "post",
 	    				async: false,//非异步
@@ -59,7 +59,7 @@
 </head>
 
 <body class="rightBody">
-<form id="form" name="form" action="${basePath }/tax/editUser.action" method="post" enctype="multipart/form-data">
+<form id="form" name="form" action="${basePath }/tax/user/editUser.action" method="post" enctype="multipart/form-data">
     <div class="p_d_1">
         <div class="p_d_1_1">
             <div class="content_info">

@@ -23,4 +23,9 @@ public class RolePrivilege {
 			CompositeRolePrivilege compositeRolePrivilege) {
 		this.compositeRolePrivilege = compositeRolePrivilege;
 	}
+	
+	@Override
+	public String toString() {
+		return "'" + compositeRolePrivilege.getPrivilege() + "'";
+	}
 }

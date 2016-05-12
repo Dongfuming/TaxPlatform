@@ -30,9 +30,9 @@
 		
 		<!-- 全局返回结果 -->
 		<!-- <global-results>
-			<result name="error" type="systemErrorType">/WEB-INF/jsp/error.jsp</result>
-			<result name="systemError">/WEB-INF/jsp/error.jsp</result>
-			<result name="input">/WEB-INF/jsp/error.jsp</result>
+			<result name="error" type="systemErrorType">/jsp/error.jsp</result>
+			<result name="systemError">/jsp/error.jsp</result>
+			<result name="input">/jsp/error.jsp</result>
 		</global-results> -->
 		
 		<!-- 全局异常映射 -->
