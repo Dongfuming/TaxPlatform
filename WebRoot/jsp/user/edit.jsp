@@ -98,7 +98,9 @@
         </tr>
         <tr>
             <td class="tdBg" width="200px">角色：</td>
-            <td></td>
+            <td>
+            <s:checkboxlist list="#roleList" name="roleIdArray" listKey="id" listValue="name"></s:checkboxlist>
+            </td>
         </tr>
         <tr>
             <td class="tdBg" width="200px">电子邮箱：</td>

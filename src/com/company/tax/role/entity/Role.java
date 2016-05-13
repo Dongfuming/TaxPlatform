@@ -20,6 +20,10 @@ public class Role {
 	
 	public Role() { }
 
+	public Role(String id) {
+		this.id = id;
+	}
+	
 	public Role(String id, String name, String state,
 			Set<RolePrivilege> rolePrivilegeSet) {
 		super();

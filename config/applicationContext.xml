@@ -51,7 +51,6 @@
 			<list>
 				<value>classpath:com/company/test/entity/*.hbm.xml</value>
 				<value>classpath:com/company/tax/user/entity/*.hbm.xml</value>
-				<!-- 下面这行代码运行错误 -->
 				<value>classpath:com/company/tax/role/entity/*.hbm.xml</value> 
 			</list>
 		</property>

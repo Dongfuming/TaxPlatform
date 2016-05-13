@@ -17,6 +17,7 @@ import com.opensymphony.xwork2.ActionContext;
  * @author Dongfuming
  * @date 2016-5-11 下午3:49:08
  */
+@SuppressWarnings("serial")
 public class RoleAction extends BaseAction {
 	
 	@Resource
@@ -39,7 +40,7 @@ public class RoleAction extends BaseAction {
 	}
 	
 	public String toAddRolePage() {
-		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP); // 加载角色权限
+		transferDataOfPrivilegaMap();
 		return "toAddRolePage";
 	}
 	
@@ -64,16 +65,11 @@ public class RoleAction extends BaseAction {
 	}
 	
 	public String toEditRolePage() {
-		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP);
+		// 传权限列表、角色、该角色选中的权限过去
+		transferDataOfPrivilegaMap();
 		role = roleService.findRoleById(role.getId());
+		transferDataOfPrivilegaIdArray();
 		
-		// 处理权限回显
-		privilegeIdArray = new String[role.getRolePrivilegeSet().size()];
-		int i = 0;
-		for(RolePrivilege privilege: role.getRolePrivilegeSet()){
-			privilegeIdArray[i++] = privilege.getCompositeRolePrivilege().getPrivilege();
-		}
-
 		return "toEditRolePage";
 	}
 	
@@ -93,6 +89,19 @@ public class RoleAction extends BaseAction {
 			roleService.delete(roleId);
 		}
 		return "deleteSelectedRoleSuccess";
+	}
+	
+	/***************** private method *****************/
+	private void transferDataOfPrivilegaMap() {
+		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP);
+	}
+	
+	private void transferDataOfPrivilegaIdArray() {
+		privilegeIdArray = new String[role.getRolePrivilegeSet().size()];
+		int i = 0;
+		for(RolePrivilege privilege: role.getRolePrivilegeSet()){
+			privilegeIdArray[i++] = privilege.getCompositeRolePrivilege().getPrivilege();
+		}
 	}
 	
 	/***************** 数据注入 *****************/

@@ -5,6 +5,7 @@ package com.company.core.exception;
  * @author Dongfuming
  * @date 2016-5-11 上午10:13:11
  */
+@SuppressWarnings("serial")
 public class ActionException extends SystemException {
 
 	public ActionException() {

@@ -6,6 +6,7 @@ import com.opensymphony.xwork2.ActionSupport;
  * @author Dongfuming
  * @date 2016-5-11 上午9:49:12
  */
+@SuppressWarnings("serial")
 public abstract class BaseAction extends ActionSupport {
 	
 	protected String[] selectedRow; // 删除选中的行

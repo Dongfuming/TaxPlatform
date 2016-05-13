@@ -1,24 +1,26 @@
-package com.company.tax.role.entity;
+package com.company.tax.user.entity;
 
 import java.io.Serializable;
 
+import com.company.tax.role.entity.Role;
+
 /**
- * 角色--权限，多对多关系，根据 role.id 和 privilege 查询角色
+ * 用户--角色，多对多关系， 主键：role.id 和 userId 
  * 复合主键类，实现Serializable接口且定义equals()与hashCode()方法
  * @author Dongfuming
- * @date 2016-5-11 下午1:46:43
+ * @date 2016-5-12 下午4:56:49
  */
 @SuppressWarnings("serial")
-public class CompositeRolePrivilege implements Serializable {
+public class CompositeUserRole implements Serializable {
 	
 	private Role role; // 角色 
-	private String privilege; // 权限
+	private String userId; // 用户
 	
-	public CompositeRolePrivilege() { }
+	public CompositeUserRole() { }
 	
-	public CompositeRolePrivilege(Role role, String privilege) {
+	public CompositeUserRole(Role role, String userId) {
 		this.role = role;
-		this.privilege = privilege;
+		this.userId = userId;
 	}
 
 	public Role getRole() {
@@ -27,24 +29,24 @@ public class CompositeRolePrivilege implements Serializable {
 	public void setRole(Role role) {
 		this.role = role;
 	}
-	public String getPrivilege() {
-		return privilege;
+	public String getUserId() {
+		return userId;
 	}
-	public void setPrivilege(String privilege) {
-		this.privilege = privilege;
-	}	
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((privilege == null) ? 0 : privilege.hashCode());
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		return result;
 	}
 	
 	@Override
-	public boolean equals(Object obj) { // 比较privilege和role
+	public boolean equals(Object obj) { 
 		if (this == obj) {
 			return true;
 		}
@@ -54,12 +56,12 @@ public class CompositeRolePrivilege implements Serializable {
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		CompositeRolePrivilege other = (CompositeRolePrivilege) obj;
-		if (privilege == null) {
-			if (other.privilege != null) {
+		CompositeUserRole other = (CompositeUserRole) obj;
+		if (userId == null) {
+			if (other.userId != null) {
 				return false;
 			}
-		} else if (!privilege.equals(other.privilege)) {
+		} else if (!userId.equals(other.userId)) {
 			return false;
 		}
 		if (role == null) {

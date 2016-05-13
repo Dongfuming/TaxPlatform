@@ -3,6 +3,8 @@ package com.company.core.constant;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.company.tax.user.entity.User;
+
 
 /**
  * 全局常量
@@ -19,6 +21,9 @@ public class Constant {
 	public static String PRIVILEGE_SPACE = "space";  // 我的空间
 
 	public static Map<String, String> PRIVILEGE_MAP;
+	
+	public static String DEFAULT_USER_PASSWORD = "123456";
+	public static String DEFAULT_USER_STATE = User.USER_STATE_VALID;
 	
 	static {
 		PRIVILEGE_MAP = new HashMap<String, String>();

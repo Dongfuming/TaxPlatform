@@ -3,7 +3,6 @@ package com.company.core.dao.impl;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -20,6 +19,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 	
 	private Class<T> clazz;
 	
+	@SuppressWarnings("unchecked")
 	public BaseDaoImpl() {
 		// 使用反射得到 T 的真实类型
 		ParameterizedType type = (ParameterizedType)this.getClass().getGenericSuperclass();
@@ -48,6 +48,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 		return object;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findObjects() {
 		Query query = getSession().createQuery("FROM " + clazz.getSimpleName());

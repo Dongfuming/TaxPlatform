@@ -3,7 +3,6 @@ package com.company.test.action;
 import javax.annotation.Resource;
 
 import com.company.test.service.TestService;
-import com.opensymphony.xwork2.Action;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**

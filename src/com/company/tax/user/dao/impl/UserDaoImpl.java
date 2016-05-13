@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.company.core.dao.impl.BaseDaoImpl;
 import com.company.tax.user.dao.UserDao;
 import com.company.tax.user.entity.User;
+import com.company.tax.user.entity.UserRole;
 
 /**
  * UserDao实现类
@@ -17,9 +18,9 @@ import com.company.tax.user.entity.User;
 @Repository("userDao")
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> findUserByAccountAndId(String id, String account) {
-		System.out.println("xxx id = " + id + ", account = " + account);
 		String hql = "FROM User WHERE account = ?";
 		if(StringUtils.isNotBlank(id)){
 			hql += " AND id != ?";
@@ -29,6 +30,28 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		if(StringUtils.isNotBlank(id)){
 			query.setParameter(1, id);
 		}
+		return query.list();
+	}
+
+	@Override
+	public void saveUserRole(UserRole userRole) {
+		this.getHibernateTemplate().save(userRole);
+	}
+
+	@Override
+	public void deleteUserRolesByUserId(String userId) {
+		String hql = "DELETE FROM UserRole WHERE compositeUserRole.userId = ?";
+		Query query = this.getSession().createQuery(hql);
+		query.setParameter(0, userId);
+		query.executeUpdate();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<UserRole> findUserRolesByUserId(String userId) {
+		String hql = "FROM UserRole WHERE compositeUserRole.userId = ?";
+		Query query = this.getSession().createQuery(hql);
+		query.setParameter(0, userId);
 		return query.list();
 	}
 }

@@ -1,6 +1,7 @@
 package com.company.tax.user.action;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -15,10 +16,12 @@ import org.apache.struts2.ServletActionContext;
 import com.company.core.action.BaseAction;
 import com.company.core.exception.ActionException;
 import com.company.core.exception.ServiceException;
+import com.company.tax.role.entity.Role;
+import com.company.tax.role.service.RoleService;
 import com.company.tax.user.entity.User;
+import com.company.tax.user.entity.UserRole;
 import com.company.tax.user.service.UserService;
-import com.opensymphony.xwork2.Action;
-import com.opensymphony.xwork2.ActionSupport;
+import com.opensymphony.xwork2.ActionContext;
 
 /**
  * @author Dongfuming
@@ -29,8 +32,11 @@ public class UserAction extends BaseAction {
 	
 	@Resource
 	private UserService userService;
+	@Resource
+	private RoleService roleService;
 	private List<User> userList; // 界面显示的用户列表
 	private User user; // 新增、编辑、删除的用户
+	private String[] roleIdArray; // 用户的角色
 	
 	private File headImg; // 页面file表单域中对应的名称
 	private String headImgContentType; 
@@ -39,11 +45,6 @@ public class UserAction extends BaseAction {
 	private File userExcel; // 导入用户
 	private String userExcelContentType;
 	private String userExcelFileName;
-	
-	@Override
-	public String execute() throws Exception {
-		return Action.SUCCESS;
-	}
 	
 	public String listUser() throws ActionException { // 查
 		try {
@@ -56,16 +57,22 @@ public class UserAction extends BaseAction {
 	}
 	
 	public String addUser() { // 增
+		System.out.println("新增用户 = " + user);
 		saveUserHeadImg();
-		userService.save(user);
+		userService.saveUserAndRoles(user, roleIdArray);
+		System.out.println("角色 = " + Arrays.toString(roleIdArray));
+		
 		return "addUserSuccess";
 	}
 
 	public String toAddUserPage() {
+		transferDataOfRoleList();
 		return "toAddUserPage";
 	}
 	
-	public String toEditUserPage() { 
+	public String toEditUserPage() {
+		transferDataOfRoleList();
+		transferDataOfRoleIdArray();
 		user = userService.findUserById(user.getId());
 		return "toEditUserPage";
 	}
@@ -73,34 +80,33 @@ public class UserAction extends BaseAction {
 	public String editUser() { // 改
 		System.out.println("编辑用户 = " + user);
 		saveUserHeadImg();
-		userService.update(user);
+		userService.updateUserAndRoles(user, roleIdArray);
 		return "editUserSuccess";
 	}
-	
+
 	public String deleteUser() { // 删
 		userService.delete(user.getId());
 		return "deleteUserSuccess";
 	}
 	
 	public String deleteSelectedUser() { // 批量删除
-		for (String id : selectedRow) {
-			userService.delete(id);
+		for (String userId : selectedRow) {
+			userService.delete(userId);
 		}
 		return "deleteSelectedUserSuccess";
 	}
 	
-	
 	public void exportUserExcel() { // 导出
 		try {
-			//1、查找用户列表
 			userList = userService.findUsers();
-			//2、导出文件
+			
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("application/x-execl");
-			response.setHeader("Content-Disposition", "attachment;filename=" + new String("用户列表.xls".getBytes(), "ISO-8859-1"));
+			String fileName = new String("用户列表.xls".getBytes(), "ISO-8859-1");
+			response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
 			ServletOutputStream outputStream = response.getOutputStream();
 			userService.exportUserExcel(userList, outputStream);
-			if(outputStream != null){
+			if(outputStream != null) {
 				outputStream.close();
 			}
 		} catch (Exception e) {
@@ -112,11 +118,8 @@ public class UserAction extends BaseAction {
 		System.out.println("excel文件名 = " + userExcelFileName);
 		System.out.println("excel文件类型 = " + userExcelContentType);
 		
-		//1、获取excel文件
 		if(userExcel != null) {
-			//是否是excel
 			if(userExcelFileName.matches("^.+\\.(?i)((xls)|(xlsx))$")) {
-				//2、导入
 				userService.importUserExcel(userExcel, userExcelFileName);
 			}
 		}
@@ -125,15 +128,12 @@ public class UserAction extends BaseAction {
 	
 	public void verifyUserAccount() { // 校验帐号
 		try {
-			//1、获取帐号
 			if(user != null && StringUtils.isNotBlank(user.getAccount())){
-				//2、根据帐号到数据库中校验是否存在该帐号对应的用户
-				// 如果是编辑的话，应把当前记录排除后再查看是否有重复账号，所以把id传入查询
+				// 检查数据库中是否已存在此账号 (如果是编辑的话，应把当前用户id排除后再查找)
 				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getAccount());
 				System.out.println("已存在的" + user.getAccount() + "用户个数 = " + list.size());
 				String unique = "true";
-				if(list != null && list.size() > 0){
-					//说明该帐号已经存在
+				if(list != null && list.size() > 0) {
 					unique = "false";
 				}
 
@@ -147,21 +147,36 @@ public class UserAction extends BaseAction {
 			e.printStackTrace();
 		}
 	}
-
-	/******************* 私有方法 ******************/ 
+	
+	/******************* private method ******************/ 
 	private void saveUserHeadImg() {
 		try {
 			if(headImg != null) {
-				// 保存到服务器文件里 /Library/Java/tomcat/webapps/TaxPlatform/upload/user
+				// 保存在服务器文件里 /Library/Java/tomcat/webapps/TaxPlatform/upload/user
 				String filePath = ServletActionContext.getServletContext().getRealPath("upload/user");
 				String fileName = UUID.randomUUID().toString().replaceAll("-", "") + headImgFileName.substring(headImgFileName.lastIndexOf("."));
 				FileUtils.copyFile(headImg, new File(filePath, fileName));
 				
-				user.setHeadImg("user/" + fileName); // 设置头像路径
+				user.setHeadImg("user/" + fileName); 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void transferDataOfRoleIdArray() {
+		List<UserRole> userRoleList = userService.findUserRolesByUserId(user.getId());
+		roleIdArray = new String[userRoleList.size()];
+		int i = 0;
+		for (UserRole userRole : userRoleList) {
+			String roleId = userRole.getCompositeUserRole().getRole().getId();
+			roleIdArray[i++] = roleId;
+		}
+	}
+	
+	private void transferDataOfRoleList() {
+		List<Role> roleList = roleService.findRoles();
+		ActionContext.getContext().getContextMap().put("roleList", roleList);
 	}
 
 	/******************* 数据注入 ******************/ 
@@ -212,6 +227,12 @@ public class UserAction extends BaseAction {
 	}
 	public void setUserExcelFileName(String userExcelFileName) {
 		this.userExcelFileName = userExcelFileName;
+	}
+	public String[] getRoleIdArray() {
+		return roleIdArray;
+	}
+	public void setRoleIdArray(String[] roleIdArray) {
+		this.roleIdArray = roleIdArray;
 	}
 }
 

@@ -5,6 +5,7 @@ package com.company.core.exception;
  * @author Dongfuming
  * @date 2016-5-11 上午10:16:04
  */
+@SuppressWarnings("serial")
 public class ServiceException extends SystemException {
 
 	public ServiceException() {

@@ -7,7 +7,7 @@ package com.company.tax.role.entity;
  */
 public class RolePrivilege {
 
-	private CompositeRolePrivilege compositeRolePrivilege; // 角色权限复合主键
+	private CompositeRolePrivilege compositeRolePrivilege; // 复合主键
 
 	public RolePrivilege() { }
 	
