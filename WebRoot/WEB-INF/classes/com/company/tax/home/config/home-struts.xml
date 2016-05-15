@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+						<!-- 纳税服务模块 -->
+						
+	<package name="tax-home-package" extends="base-package" namespace="/tax/home">
+	
+		<action name="*" class="com.company.tax.home.action.HomeAction" method="{1}">
+		
+			<result name="toTaxHomePage">/jsp/tax/home/home.jsp</result>
+			
+			<result name="toTaxHomePageTop">/jsp/tax/home/top.jsp</result>
+			
+			<result name="toTaxHomePageLeft">/jsp/tax/home/left.jsp</result>
+			
+		</action>
+		
+	</package>
+	
+
+</struts>

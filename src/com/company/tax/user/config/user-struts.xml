@@ -4,18 +4,19 @@
     "http://struts.apache.org/dtds/struts-2.0.dtd">
 
 <struts>
-
+							<!-- 纳税服务之用户管理 -->
+							
 	<package name="user-package" extends="base-package" namespace="/tax/user">
 	
 		<action name="*" class="com.company.tax.user.action.UserAction" method="{1}">
 		
-			<result name="listUser">/jsp/user/list.jsp</result>
+			<result name="listUser">/jsp/tax/user/list.jsp</result>
 			
-			<result name="toAddUserPage">/jsp/user/add.jsp</result>
+			<result name="toAddUserPage">/jsp/tax/user/add.jsp</result>
 			
 			<result name="addUserSuccess" type="redirectAction">listUser</result>
 			
-			<result name="toEditUserPage">/jsp/user/edit.jsp</result>
+			<result name="toEditUserPage">/jsp/tax/user/edit.jsp</result>
 
 			<result name="editUserSuccess" type="redirectAction">listUser</result>
 			

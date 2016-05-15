@@ -1,9 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/common/header.jsp" %> 
+
 <html>
 <head>
-    <%@include file="/common/header.jsp"%>
     <title>角色管理</title>
 </head>
+
 <body class="rightBody">
 <form id="form" name="form" action="${basePath }/tax/role/addRole.action" method="post" enctype="multipart/form-data">
     <div class="p_d_1">

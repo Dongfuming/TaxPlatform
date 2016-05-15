@@ -1,6 +1,7 @@
 package com.company.tax.user.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 用户对象实体类
@@ -14,7 +15,6 @@ public class User {
 	private String account;
 	private String name;
 	private String password;
-	
 	private String headImg;
 	private boolean gender;
 	private String state;
@@ -22,6 +22,7 @@ public class User {
 	private String email;
 	private Date birthday;
 	private String memo;
+	private List<UserRole> userRoleList;
 	
 	//用户状态
 	public static String USER_STATE_VALID = "1";//有效
@@ -116,7 +117,13 @@ public class User {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
-
+	public void setUserRoleList(List<UserRole> userRoleList) {
+		this.userRoleList = userRoleList;
+	}
+	public List<UserRole> getUserRoleList() {
+		return userRoleList;
+	}
+	
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", dept=" + dept + ", account=" + account

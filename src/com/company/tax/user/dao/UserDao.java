@@ -24,4 +24,6 @@ public interface UserDao extends BaseDao<User> {
 		
 	// 查找用户的所有用户角色
 	public List<UserRole> findUserRolesByUserId(String userId);
+	
+	public List<User> findUsersByAccountAndPassword(String account, String password);
 }

@@ -169,4 +169,10 @@ public class UserSeviceImpl implements UserService {
 			}
 		}
 	}
+
+	@Override
+	public List<User> findUsersByAccountAndPassword(String account,
+			String password) {
+		return userDao.findUsersByAccountAndPassword(account, password);
+	}
 }

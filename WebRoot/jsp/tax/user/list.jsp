@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ include file="/jsp/common/header.jsp" %> 
 
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<title>用户管理</title>
 		
-		 <%@include file="/common/header.jsp" %> 
-
 	    <script type="text/javascript">
 	      	//全选、全反选
 			function doSelectAll(){

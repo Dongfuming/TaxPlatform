@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+							<!-- 登录/登出 -->
+
+	<package name="login-package" extends="base-package" namespace="/system/login">
+	
+		<action name="*" class="com.company.login.action.LoginAction" method="{1}">
+		
+			<result name="toLoginPage">/jsp/login/_login.jsp</result>
+
+			<result name="loginSuccess">/jsp/home/home.jsp</result>
+
+			<result name="toNoPrivilegePage">/jsp/login/noPrivilege.jsp</result>
+
+			<!-- 为什么用redirectAction跑不通呢？？？ namespace不能同名吗？？？ -->
+ 			<!-- <result name="loginSuccess" type="redirectAction">toSystemHomePage</result> --> 
+			
+		</action>
+		
+	</package>
+	
+
+</struts>

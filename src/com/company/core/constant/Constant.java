@@ -25,6 +25,8 @@ public class Constant {
 	public static String DEFAULT_USER_PASSWORD = "123456";
 	public static String DEFAULT_USER_STATE = User.USER_STATE_VALID;
 	
+	public static String USER = "LOGIN_USER"; 
+	
 	static {
 		PRIVILEGE_MAP = new HashMap<String, String>();
 		PRIVILEGE_MAP.put(PRIVILEGE_ADMINISTRATION, "行政管理");

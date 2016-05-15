@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+							<!-- 系统主页 -->
+
+	<package name="system-home-package" extends="base-package" namespace="/system/home">
+	
+		<action name="*" class="com.company.home.action.HomeAction" method="{1}">
+		
+			<result name="toSystemHomePage">/jsp/home/home.jsp</result>
+			
+		</action>
+		
+	</package>
+	
+
+</struts>

@@ -36,5 +36,5 @@ public interface UserService {
 
 	public List<UserRole> findUserRolesByUserId(String userId);
 	
-	//public List<User> findUserByAccountAndPassword(String account, String password);
+	public List<User> findUsersByAccountAndPassword(String account, String password);
 }

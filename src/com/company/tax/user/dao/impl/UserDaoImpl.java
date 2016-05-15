@@ -54,4 +54,15 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		query.setParameter(0, userId);
 		return query.list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<User> findUsersByAccountAndPassword(String account,
+			String password) {
+		String hql = "FROM User WHERE account = ? AND password = ?";
+		Query query = this.getSession().createQuery(hql);
+		query.setParameter(0, account);
+		query.setParameter(1, password);
+		return query.list();
+	}
 }
