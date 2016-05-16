@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import com.company.core.constant.Constant;
 import com.company.core.exception.ServiceException;
+import com.company.core.service.imple.BaseServiceImpl;
 import com.company.core.util.ExcelUtil;
 import com.company.tax.role.entity.Role;
 import com.company.tax.user.dao.UserDao;
@@ -32,10 +33,15 @@ import com.company.tax.user.service.UserService;
  * @date 2016-5-9 下午1:42:36
  */
 @Service("userService")
-public class UserSeviceImpl implements UserService {
+public class UserSeviceImpl extends BaseServiceImpl<User> implements UserService {
 
-	@Resource
 	private UserDao userDao;
+	
+	@Resource
+	public void setUserDao(UserDao userDao) {
+		super.setBaseDao(userDao);
+		this.userDao = userDao;
+	}
 	
 	@Override
 	public void save(User user) {

@@ -7,17 +7,14 @@ package com.company.tax.home.action;
  */
 public class HomeAction {
 
-	// 跳转到纳税访问系统首页
 	public String toTaxHomePage(){
 		return "toTaxHomePage";
 	}
 	
-	// 跳转到纳税访问系统首页-顶部
 	public String toTaxHomePageTop(){
 		return "toTaxHomePageTop";
 	}
 	
-	// 跳转到纳税访问系统首页-左边菜单
 	public String toTaxHomePageLeft(){
 		return "toTaxHomePageLeft";
 	}
