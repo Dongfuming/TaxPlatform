@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/common/header.jsp" %> 
+
 <html>
 <head>
-    <%@include file="/common/header.jsp"%>
     <title>信息发布管理</title>
+    
     <script type="text/javascript">
   	//全选、全反选
 	function doSelectAll(){
@@ -13,40 +15,41 @@
 	}
   	//新增
   	function doAdd(){
-  		document.forms[0].action = "${basePath}nsfw/info_addUI.action";
+  		document.forms[0].action = "${basePath }/tax/info/toAddInfoPage.action";
   		document.forms[0].submit();
   	}
   	//编辑
   	function doEdit(id){
-  		document.forms[0].action = "${basePath}nsfw/info_editUI.action?info.infoId=" + id;
+  		document.forms[0].action = "${basePath }/tax/info/toEditInfoPage.action?info.infoId=" + id;
   		document.forms[0].submit();
   	}
   	//删除
   	function doDelete(id){
-  		document.forms[0].action = "${basePath}nsfw/info_delete.action?info.infoId=" + id;
+  		document.forms[0].action = "${basePath }/tax/info/deleteInfo.action?info.infoId=" + id;
   		document.forms[0].submit();
   	}
   	//批量删除
   	function doDeleteAll(){
-  		document.forms[0].action = "${basePath}nsfw/info_deleteSelected.action";
+  		document.forms[0].action = "${basePath }/tax/info/deleteSelectedInfo.action";
   		document.forms[0].submit();
   	}
   	//异步发布信息,信息的id及将要改成的信息状态
-  	function doPublic(infoId, state){
+  	function doPublic(infoId, state) {
   		//1、更新信息状态
   		$.ajax({
-  			url:"${basePath}nsfw/info_publicInfo.action",
+  			url:"${basePath }/tax/info/changeInfoState.action",
   			data:{"info.infoId":infoId, "info.state":state},
   			type:"post",
-  			success: function(msg){
+  			success: function(msg) {
   				//2、更新状态栏、操作栏的显示值
-  				if("更新状态成功" == msg){
-  					if(state == 1){//说明信息状态已经被改成 发布，状态栏显示 发布，操作栏显示 停用
+  				if("更新状态成功" == msg) { 
+  					if(state == 1) { 
+  						// 操作拦之前是发布，现在要改成停用，且状态栏改成发布
   						$("#show_"+infoId).html("发布");
-  						$("#oper_"+infoId).html('<a href="javascript:doPublic(\''+infoId+'\',0)">停用</a>');
+  						$("#operate_"+infoId).html('<a href="javascript:doPublic(\''+infoId+'\',0)">停用</a>');
   					} else {
   						$("#show_"+infoId).html("停用");
-  						$("#oper_"+infoId).html('<a href="javascript:doPublic(\''+infoId+'\',1)">发布</a>');
+  						$("#operate_"+infoId).html('<a href="javascript:doPublic(\''+infoId+'\',1)">发布</a>');
   					}
   				} else {alert("更新信息状态失败！");}
   			},
@@ -57,6 +60,7 @@
   	}
     </script>
 </head>
+
 <body class="rightBody">
 <form name="form1" action="" method="post">
     <div class="p_d_1">
@@ -94,15 +98,19 @@
                                 </td>
                                 <td align="center"><s:property value="creator"/></td>
                                 <td align="center"><s:date name="createTime" format="yyyy-MM-dd HH:mm"/></td>
-                                <td id="show_<s:property value='infoId'/>" align="center"><s:property value="state==1?'发布':'停用'"/></td>
+                                <!-- 状态栏：发布 or 停用 -->
+                                <td id="show_<s:property value='infoId'/>" align="center"><s:property value="state==1?'发布':'停用'"/></td> 
                                 <td align="center">
-                                	<span  id="oper_<s:property value='infoId'/>">
+                                	<!-- 操作栏：发布 or 停用 -->
+                                	<span  id="operate_<s:property value='infoId'/>">
                                 	<s:if test="state==1">
-                                		<a href="javascript:doPublic('<s:property value='infoId'/>',0)">停用</a>
-                                	</s:if><s:else>
-                                		<a href="javascript:doPublic('<s:property value='infoId'/>',1)">发布</a>
+                                		<a href="javascript:doPublic('<s:property value='infoId'/>', 0)">停用</a>
+                                	</s:if>
+                                	<s:else>
+                                		<a href="javascript:doPublic('<s:property value='infoId'/>', 1)">发布</a>
                                 	</s:else>
                                 	</span>
+                                	
                                     <a href="javascript:doEdit('<s:property value='infoId'/>')">编辑</a>
                                     <a href="javascript:doDelete('<s:property value='infoId'/>')">删除</a>
                                 </td>

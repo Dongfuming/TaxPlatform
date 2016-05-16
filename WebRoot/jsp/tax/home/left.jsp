@@ -71,7 +71,7 @@
                     </a></dt>
                 </dl>
                 <dl class="">
-                    <dt><a class="xxfb" href="${basePath}/jsp/common/welcome.jsp" target="mainFrame"><b></b>信息发布管理<s class="down"></s> </a></dt>
+                    <dt><a class="xxfb" href="${basePath }/tax/info/listInfo.action" target="mainFrame"><b></b>信息发布管理<s class="down"></s> </a></dt>
                 </dl>
                 <dl class="">
                     <dt><a class="tssl" href="#" target="mainFrame"><b></b>投诉受理管理<s class="down"></s> </a></dt>

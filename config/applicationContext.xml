@@ -52,6 +52,7 @@
 				<value>classpath:com/company/test/entity/*.hbm.xml</value>
 				<value>classpath:com/company/tax/user/entity/*.hbm.xml</value>
 				<value>classpath:com/company/tax/role/entity/*.hbm.xml</value> 
+				<value>classpath:com/company/tax/info/entity/*.hbm.xml</value> 
 			</list>
 		</property>
 	</bean>
@@ -90,6 +91,7 @@
     <import resource="classpath:com/company/test/config/test-spring.xml" />
     <import resource="classpath:com/company/tax/user/config/user-spring.xml" />
     <import resource="classpath:com/company/tax/role/config/role-spring.xml" />
+    <import resource="classpath:com/company/tax/info/config/info-spring.xml" />
     
     <!-- 用户权限鉴定类 -->
     <!-- <bean id="user" class="cn.itcast.core.permission.impl.PermissionCheckImpl"></bean> -->

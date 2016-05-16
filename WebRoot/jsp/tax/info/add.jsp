@@ -1,19 +1,21 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ include file="/jsp/common/header.jsp"%>
+
 <html>
 <head>
-    <%@include file="/common/header.jsp"%>
     <title>信息发布管理</title>
-    <script type="text/javascript" charset="utf-8" src="${basePath }js/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="${basePath }js/ueditor/ueditor.all.min.js"> </script>
-    <script type="text/javascript" charset="utf-8" src="${basePath }js/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${basePath }/js/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="${basePath }/js/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="${basePath }/js/ueditor/lang/zh-cn/zh-cn.js"></script>
 
     <script>
-   		window.UEDITOR_HOME_URL = "${basePath }js/ueditor/";
+   		window.UEDITOR_HOME_URL = "${basePath }/js/ueditor/";
     	var ue = UE.getEditor('editor');
     </script>
 </head>
+
 <body class="rightBody">
-<form id="form" name="form" action="${basePath }nsfw/info_add.action" method="post" enctype="multipart/form-data">
+<form id="form" name="form" action="${basePath }/tax/info/addInfo.action" method="post" enctype="multipart/form-data">
     <div class="p_d_1">
         <div class="p_d_1_1">
             <div class="content_info">
@@ -41,14 +43,14 @@
         <tr>
             <td class="tdBg" width="200px">创建人：</td>
             <td>
-            	<s:property value="#session.SYS_USER.name"/>
-            	<s:hidden name="info.creator" value="%{#session.SYS_USER.name}"/>
+            	<s:property value="#session.LOGIN_USER.name"/>
+            	<s:hidden name="info.creator" value="%{#session.LOGIN_USER.name}"/>
             </td>
             <td class="tdBg" width="200px">创建时间：</td>
             <td>
              	<s:date name="info.createTime" format="yyyy-MM-dd HH:mm"/>
              	<s:hidden name="info.createTime"/>
-            </td>
+            </td> 
         </tr>
     </table>
     <!-- 默认信息状态为 发布 -->
@@ -57,6 +59,9 @@
         <input type="submit" class="btnB2" value="保存" />
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button"  onclick="javascript:history.go(-1)" class="btnB2" value="返回" />
+        <br/>
+        <br/>
+        <br/>
     </div>
     </div></div></div>
 </form>

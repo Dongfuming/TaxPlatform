@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Query;
-import org.springframework.stereotype.Repository;
+
 import com.company.core.dao.impl.BaseDaoImpl;
 import com.company.tax.user.dao.UserDao;
 import com.company.tax.user.entity.User;
@@ -15,7 +15,6 @@ import com.company.tax.user.entity.UserRole;
  * @author Dongfuming
  * @date 2016-5-9 上午11:27:41
  */
-@Repository("userDao")
 public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 
 	@SuppressWarnings("unchecked")

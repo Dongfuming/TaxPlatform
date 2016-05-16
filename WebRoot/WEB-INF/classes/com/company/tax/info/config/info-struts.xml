@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+						<!-- 纳税服务之信息发布管理 -->
+							
+	<package name="info-package" extends="base-package" namespace="/tax/info">
+	
+		<action name="*" class="com.company.tax.info.action.InfoAction" method="{1}">
+		
+			<result name="listInfo">/jsp/tax/info/list.jsp</result>
+			
+			<result name="toAddInfoPage">/jsp/tax/info/add.jsp</result>
+			
+			<result name="addInfoSuccess" type="redirectAction">listInfo</result>
+			
+			<result name="toEditInfoPage">/jsp/tax/info/edit.jsp</result>
+
+			<result name="editInfoSuccess" type="redirectAction">listInfo</result>
+			
+			<result name="deleteInfoSuccess" type="redirectAction">listInfo</result>
+
+			<result name="deleteSelectedInfoSuccess" type="redirectAction">listInfo</result>
+
+		</action>
+		
+	</package>
+	
+
+</struts>

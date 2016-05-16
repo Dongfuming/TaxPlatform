@@ -25,6 +25,8 @@
 	<include file="com/company/tax/home/config/home-struts.xml"></include>
 	<!-- 登录 -->
 	<include file="com/company/login/config/login-struts.xml"></include>
+	<!-- 登录 -->
+	<include file="com/company/tax/info/config/info-struts.xml"></include>
 	
 	<!-- 配置全局结果及异常映射 -->
 	<package name="base-package" extends="struts-default">
