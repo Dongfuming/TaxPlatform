@@ -29,6 +29,9 @@
         </tr>
     </table>
     <s:hidden name="role.id"/>
+    <s:hidden name="pageNo"/>
+    <s:hidden name="searchContent"/>
+    
     <div class="tc mt20">
         <input type="submit" class="btnB2" value="保存" />
         &nbsp;&nbsp;&nbsp;&nbsp;

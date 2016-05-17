@@ -23,7 +23,6 @@ public class UserPrivilegeCheckerImpl implements UserPrivilegeChecker {
 		//List<UserRole> userRoleList = userService.findUserRolesByUserId(user.getId());
 		// 在登录后，已经set了userRoleList属性
 		List<UserRole> userRoleList = user.getUserRoleList();
-		System.out.println("用户" + user.getName() + "角色个数 ＝ " + userRoleList.size());
 		
 		if (userRoleList != null) {
 			for (UserRole userRole : userRoleList) {

@@ -18,11 +18,24 @@
 			
 			<result name="toEditUserPage">/jsp/tax/user/edit.jsp</result>
 
-			<result name="editUserSuccess" type="redirectAction">listUser</result>
+			<result name="editUserSuccess" type="redirectAction">
+				<param name="actionName">listUser</param>
+				<param name="user.name">${searchContent}</param>
+				<param name="pageNo">${pageNo}</param>
+				<param name="encode">true</param>
+			</result>
 			
-			<result name="deleteUserSuccess" type="redirectAction">listUser</result>
+			<result name="deleteUserSuccess" type="redirectAction">
+				<param name="actionName">listUser</param>
+				<param name="user.name">${searchContent}</param>
+				<param name="encode">true</param>
+			</result>
 
-			<result name="deleteSelectedUserSuccess" type="redirectAction">listUser</result>
+			<result name="deleteSelectedUserSuccess" type="redirectAction">
+				<param name="actionName">listUser</param>
+				<param name="user.name">${searchContent}</param>
+				<param name="encode">true</param>
+			</result>
 
 			<result name="importUserSuccess" type="redirectAction">listUser</result>
 			

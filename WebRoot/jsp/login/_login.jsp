@@ -93,7 +93,7 @@ html { overflow-y: hidden;  }
                 <td background="${basePath }/images/login/shuru_03.png" width=""><table width="100%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td align="left">
-                    <s:textfield id="account" name="user.account" cssClass="password1" cssStyle="color: #000000" size="31"/>
+                    <s:textfield id="account" name="user.account" cssClass="password1" cssStyle="color: #000000" size="31" value="admin"/>
                     </td>
                   </tr>
                 </table></td>
@@ -113,7 +113,7 @@ html { overflow-y: hidden;  }
                 <td background="${basePath }/images/login/shuru_03.png"><table width="100%" border="0" cellpadding="0" cellspacing="0">
                   <tr>
                     <td align="left">
-                    	<s:password id="password" name="user.password" cssClass="password"  cssStyle="color: #000000" size="31" />
+                    	<s:password id="password" name="user.password" cssClass="password"  cssStyle="color: #000000" size="31" value="admin"/>
                     </td>
                   </tr>
                 </table></td>

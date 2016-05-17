@@ -17,11 +17,24 @@
 			
 			<result name="toEditRolePage">/jsp/tax/role/edit.jsp</result>
 
-			<result name="editRoleSuccess" type="redirectAction">listRole</result>
+			<result name="editRoleSuccess" type="redirectAction">
+				<param name="actionName">listRole</param>
+				<param name="role.name">${searchContent}</param>
+				<param name="pageNo">${pageNo}</param>
+				<param name="encode">true</param>
+			</result>
 			
-			<result name="deleteRoleSuccess" type="redirectAction">listRole</result>
+			<result name="deleteRoleSuccess" type="redirectAction">
+				<param name="actionName">listRole</param>
+				<param name="role.name">${searchContent}</param>
+				<param name="encode">true</param>
+			</result>
 
-			<result name="deleteSelectedRoleSuccess" type="redirectAction">listRole</result>
+			<result name="deleteSelectedRoleSuccess" type="redirectAction">
+				<param name="actionName">listRole</param>
+				<param name="role.name">${searchContent}</param>
+				<param name="encode">true</param>
+			</result>
 
 			<result name="importRoleSuccess" type="redirectAction">listRole</result>
 			

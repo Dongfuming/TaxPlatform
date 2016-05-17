@@ -1,16 +1,18 @@
 package com.company.tax.info.action;
 
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.company.core.action.BaseAction;
+import com.company.core.util.QueryHelper;
 import com.company.tax.info.entity.Info;
 import com.company.tax.info.service.InfoService;
 import com.opensymphony.xwork2.ActionContext;
@@ -24,12 +26,25 @@ public class InfoAction extends BaseAction {
 	
 	@Resource
 	private InfoService infoService;
-	private List<Info> infoList;
 	private Info info;
+	// 搜索后，删除或编辑其中一条，跳转时需要把搜索条件也带过去，
+	// 以便回来后还能回到搜索后的结果界面
+	// 但info.title作搜索内容字段，又作更新的标题，
+	// 编辑功能会产生有冲突，删除功能不会
+	private String searchContent; 
 	
-	public String listInfo() {
+	public String listInfo() throws Exception {
 		transferDataOfInfoTypeMap();
-		infoList = infoService.findInfos();
+		QueryHelper queryHelper = new QueryHelper(Info.class, "i");
+		if (info != null && StringUtils.isNotBlank(info.getTitle())) {
+			System.out.println("infoId = " + info.getInfoId() 
+					+ ", info.title = " + info.getTitle() + 
+					", pageNo = " + getPageNo() + ", state = " + info.getState());
+			
+			info.setTitle(URLDecoder.decode(info.getTitle(), "utf-8"));
+			queryHelper.addCondition("i.title LIKE ?", "%" + info.getTitle() + "%");
+		}
+		pageResult = infoService.getPageResult(queryHelper, getPageNo(), getPageSize());
 		return "listInfo";
 	}
 	
@@ -48,6 +63,7 @@ public class InfoAction extends BaseAction {
 	}
 	
 	public String toEditInfoPage() {
+		searchContent = info.getTitle();
 		info = infoService.findInfoById(info.getInfoId());
 		transferDataOfInfoTypeMap();
 		return "toEditInfoPage";
@@ -59,11 +75,13 @@ public class InfoAction extends BaseAction {
 	}
 	
 	public String deleteInfo() {
+		searchContent = info.getTitle();
 		infoService.delete(info.getInfoId());
 		return "deleteInfoSuccess";
 	}
 	
 	public String deleteSelectedInfo() {
+		searchContent = info.getTitle();
 		for (String infoId : selectedRow) {
 			infoService.delete(infoId);
 		}
@@ -90,16 +108,16 @@ public class InfoAction extends BaseAction {
 		ActionContext.getContext().getContextMap().put("infoTypeMap", Info.INFO_TYPE_MAP);
 	}
 	
-	public void setInfoList(List<Info> infoList) {
-		this.infoList = infoList;
-	}
-	public List<Info> getInfoList() {
-		return infoList;
-	}
 	public void setInfo(Info info) {
 		this.info = info;
 	}
 	public Info getInfo() {
 		return info;
+	}
+	public void setSearchContent(String searchContent) {
+		this.searchContent = searchContent;
+	}
+	public String getSearchContent() {
+		return searchContent;
 	}
 }

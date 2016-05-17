@@ -1,6 +1,8 @@
 package com.company.tax.user.action;
 
 import java.io.File;
+import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -14,8 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.company.core.action.BaseAction;
-import com.company.core.exception.ActionException;
-import com.company.core.exception.ServiceException;
+import com.company.core.util.QueryHelper;
 import com.company.tax.role.entity.Role;
 import com.company.tax.role.service.RoleService;
 import com.company.tax.user.entity.User;
@@ -34,9 +35,9 @@ public class UserAction extends BaseAction {
 	private UserService userService;
 	@Resource
 	private RoleService roleService;
-	private List<User> userList; // 界面显示的用户列表
 	private User user; // 新增、编辑、删除的用户
 	private String[] roleIdArray; // 用户的角色
+	private String searchContent; // 暂存搜索内容
 	
 	private File headImg; // 页面file表单域中对应的名称
 	private String headImgContentType; 
@@ -46,22 +47,25 @@ public class UserAction extends BaseAction {
 	private String userExcelContentType;
 	private String userExcelFileName;
 	
-	public String listUser() throws ActionException { // 查
+	public String listUser() { // 查
+		QueryHelper queryHelper = new QueryHelper(User.class, "u");
 		try {
-			userList = userService.findUsers();
-		} catch (ServiceException e) {
+			if (user != null && StringUtils.isNotBlank(user.getName())) { // 搜索
+				user.setName(URLDecoder.decode(user.getName(), "utf-8"));
+				queryHelper.addCondition("u.name like ?", "%" + user.getName() + "%");
+			}
+			pageResult = userService.getPageResult(queryHelper, getPageNo(), getPageSize());
+			// 2016-05-16疑问: pageResult.getItems的元素是Object类型，在JSP页面用<s:iterator>标签
+			// 却可以迭代出User类型对象，<s:property>可以直接用User的属性，何解？？？ 反射吗？
+		} catch (Exception e) {
 			e.printStackTrace();
-			throw new ActionException("请求操作失败。" + e.getMessage());
 		}
 		return "listUser";
 	}
 	
 	public String addUser() { // 增
-		System.out.println("新增用户 = " + user);
 		saveUserHeadImg();
 		userService.saveUserAndRoles(user, roleIdArray);
-		System.out.println("角色 = " + Arrays.toString(roleIdArray));
-		
 		return "addUserSuccess";
 	}
 
@@ -71,6 +75,7 @@ public class UserAction extends BaseAction {
 	}
 	
 	public String toEditUserPage() {
+		searchContent = user.getName();
 		transferDataOfRoleList();
 		transferDataOfRoleIdArray();
 		user = userService.findUserById(user.getId());
@@ -78,18 +83,19 @@ public class UserAction extends BaseAction {
 	}
 	
 	public String editUser() { // 改
-		System.out.println("编辑用户 = " + user);
 		saveUserHeadImg();
 		userService.updateUserAndRoles(user, roleIdArray);
 		return "editUserSuccess";
 	}
 
 	public String deleteUser() { // 删
+		searchContent = user.getName();
 		userService.delete(user.getId());
 		return "deleteUserSuccess";
 	}
 	
 	public String deleteSelectedUser() { // 批量删除
+		searchContent = user.getName();
 		for (String userId : selectedRow) {
 			userService.delete(userId);
 		}
@@ -98,7 +104,7 @@ public class UserAction extends BaseAction {
 	
 	public void exportUserExcel() { // 导出
 		try {
-			userList = userService.findUsers();
+			List<User> userList = userService.findUsers();
 			
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("application/x-execl");
@@ -148,7 +154,6 @@ public class UserAction extends BaseAction {
 		}
 	}
 	
-	/******************* private method ******************/ 
 	private void saveUserHeadImg() {
 		try {
 			if(headImg != null) {
@@ -179,18 +184,11 @@ public class UserAction extends BaseAction {
 		ActionContext.getContext().getContextMap().put("roleList", roleList);
 	}
 
-	/******************* 数据注入 ******************/ 
 	public void setUser(User user) {
 		this.user = user;
 	}
 	public User getUser() {
 		return user;
-	}
-	public void setUserList(List<User> userList) {
-		this.userList = userList;
-	}
-	public List<User> getUserList() {
-		return userList;
 	}
 	public File getHeadImg() {
 		return headImg;
@@ -233,6 +231,12 @@ public class UserAction extends BaseAction {
 	}
 	public void setRoleIdArray(String[] roleIdArray) {
 		this.roleIdArray = roleIdArray;
+	}
+	public void setSearchContent(String searchContent) {
+		this.searchContent = searchContent;
+	}
+	public String getSearchContent() {
+		return searchContent;
 	}
 }
 

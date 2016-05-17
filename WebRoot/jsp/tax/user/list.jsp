@@ -43,6 +43,16 @@
 	      		document.forms[0].action = "${basePath}/tax/user/importUserExcel.action";
 	      		document.forms[0].submit();
 	      	}
+	      	
+	      	var list_url = "${basePath}/tax/user/listUser.action";
+	      	
+	        //搜索
+	    	function doSearch() {
+	      		//重置页号
+	      		$("#pageNo").val(1);
+	    	  	document.forms[0].action = list_url;
+	    	  	document.forms[0].submit();
+	    	 }
 	    </script>
 	</head>
 	
@@ -78,8 +88,7 @@
                             <td width="100" align="center">操作</td>
                         </tr>
                         
-                        <s:if test="userList.size != 0">
-	                        <s:iterator value="userList" status="st">
+	                        <s:iterator value="pageResult.items" status="st">
 	                            <tr <s:if test="#st.odd">bgcolor="f8f8f8"</s:if> >
 	                                <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='id'/>" /></td>
 	                                <td align="center"><s:property value="name"/></td>
@@ -93,28 +102,24 @@
 	                                </td>
 	                            </tr>
 	                        </s:iterator>
-	                    </s:if>
-  	 					<s:else>
-				  	 		<tr>
-  	 						<td align="center" colspan="7">暂时还没有数据</td>
-  	 						</tr>
-  	 					</s:else>
                     </table>
                 </div>
             </div>
-        <div class="c_pate" style="margin-top: 5px;">
-		<table width="100%" class="pageDown" border="0" cellspacing="0"
-			cellpadding="0">
-			<tr>
-				<td align="right">
-                 	总共1条记录，当前第 1 页，共 1 页 &nbsp;&nbsp;
-                            <a href="#">上一页</a>&nbsp;&nbsp;<a href="#">下一页</a>
-					到&nbsp;<input type="text" style="width: 30px;" onkeypress="if(event.keyCode == 13){doGoPage(this.value);}" min="1"
-					max="" value="1" /> &nbsp;&nbsp;
-			    </td>
-			</tr>
-		</table>	
-        </div>
+            <jsp:include page="/jsp/common/pageNavigator.jsp"></jsp:include>
+            
+			        <!-- <div class="c_pate" style="margin-top: 5px;">
+					<table width="100%" class="pageDown" border="0" cellspacing="0"
+						cellpadding="0">
+						<tr>
+							<td align="right">
+			                 	总共1条记录，当前第 1 页，共 1 页 &nbsp;&nbsp;
+			                            <a href="#">上一页</a>&nbsp;&nbsp;<a href="#">下一页</a>
+								到&nbsp;<input type="text" style="width: 30px;" onkeypress="if(event.keyCode == 13){doGoPage(this.value);}" min="1"
+								max="" value="1" /> &nbsp;&nbsp;
+						    </td>
+						</tr>
+					</table>	
+			        </div> -->
         </div>
     </div>
 </form>

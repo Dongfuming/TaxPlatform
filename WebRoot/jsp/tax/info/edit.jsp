@@ -53,14 +53,25 @@
             </td>
         </tr>
     </table>
+    <!-- 提交数据作保存时，需要把这些字段也传回过去 -->
     <s:hidden name="info.infoId"/>
     <s:hidden name="info.state"/>
+    <!-- 暂存搜索内容 -->
+    <s:hidden name="searchContent"/>
+    <s:hidden name="pageNo"/>
+    
     <div class="tc mt20">
         <input type="submit" class="btnB2" value="保存" />
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button"  onclick="javascript:history.go(-1)" class="btnB2" value="返回" />
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
     </div>
     </div></div></div>
+    
 </form>
 </body>
 </html>

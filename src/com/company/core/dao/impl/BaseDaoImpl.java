@@ -9,6 +9,8 @@ import org.hibernate.Query;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
 import com.company.core.dao.BaseDao;
+import com.company.core.page.PageResult;
+import com.company.core.util.QueryHelper;
 
 /**
  * BaseDao实现类
@@ -51,9 +53,71 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> findObjects() {
-		Query query = getSession().createQuery("FROM " + clazz.getSimpleName());
+		Query query = this.getSession().createQuery("FROM " + clazz.getSimpleName());
 		List<T> list = query.list();
 		return list;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findObjects(String hql, List<Object> parameters) {
+		Query query = this.getSession().createQuery(hql);
+		if (parameters != null) {
+			for (int i = 0; i < parameters.size(); i++) {
+				query.setParameter(i, parameters.get(i));
+			}
+		}
+		return query.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<T> findObjects(QueryHelper queryHelper) {
+		String hql = queryHelper.getQueryListHql();
+		Query query = this.getSession().createQuery(hql);
+		List<Object> parameters = queryHelper.getParameters();
+		if (parameters != null) {
+			for (int i = 0; i < parameters.size();i ++) {
+				query.setParameter(i, parameters.get(i));
+			}
+		}
+		return query.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public PageResult getPageResult(QueryHelper queryHelper, int pageNo,
+			int pageSize) {
+		// 查询分页里列表数据
+		String hql = queryHelper.getQueryListHql();
+		System.out.println("查询分页列表的hql = " + hql);
+		
+		Query query = this.getSession().createQuery(hql);
+		List<Object> parameters = queryHelper.getParameters();
+		if (parameters != null) {
+			for (int i = 0; i < parameters.size(); i++) {
+				query.setParameter(i, parameters.get(i));
+			}
+		}
+//		if (pageNo < 1) {
+//			pageNo = 1;
+//		}
+		query.setFirstResult((pageNo - 1) * pageSize);
+		query.setMaxResults(pageSize);
+		List<Object> items = query.list();
+		
+		// 查询总条数
+		hql = queryHelper.getQueryCountHql();
+		System.out.println("查询总条数的hql = " + hql);
+		query = null;
+		query = this.getSession().createQuery(hql);
+		if (parameters != null) {
+			for (int i = 0; i < parameters.size(); i++) {
+				query.setParameter(i, parameters.get(i));
+			}
+		}
+		long totalCount = (Long)query.uniqueResult();
+
+		return new PageResult(totalCount, pageNo, pageSize, items);
+	}
 }

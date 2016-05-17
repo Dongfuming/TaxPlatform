@@ -1,12 +1,16 @@
 package com.company.tax.role.action;
 
+import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.commons.lang3.StringUtils;
+
 import com.company.core.action.BaseAction;
 import com.company.core.constant.Constant;
+import com.company.core.util.QueryHelper;
 import com.company.tax.role.entity.CompositeRolePrivilege;
 import com.company.tax.role.entity.Role;
 import com.company.tax.role.entity.RolePrivilege;
@@ -22,20 +26,22 @@ public class RoleAction extends BaseAction {
 	
 	@Resource
 	private RoleService roleService;
-	private List<Role> roleList; // 列表显示
 	private Role role; // 编辑、删除
 	private String[] privilegeIdArray; // 新增角色的权限数组
+	private String searchContent; // 暂存搜索内容
 	
 	public String listRole() throws Exception {
-		System.out.println("list role action");
-		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP); // 加载角色权限
+		transferDataOfPrivilegaMap();
+		QueryHelper queryHelper = new QueryHelper(Role.class, "r");
 		try {
-			roleList = roleService.findRoles();
+			if(role != null && StringUtils.isNotBlank(role.getName())) { // 搜索
+				role.setName(URLDecoder.decode(role.getName(), "utf-8"));
+				queryHelper.addCondition("r.name LIKE ?", "%" + role.getName() + "%");
+			}
+			pageResult = roleService.getPageResult(queryHelper, getPageNo(), getPageSize());
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
-		System.out.println("roleList.size = " + roleList.size());
-		
 		return "listRole";
 	}
 	
@@ -65,6 +71,7 @@ public class RoleAction extends BaseAction {
 	}
 	
 	public String toEditRolePage() {
+		searchContent = role.getName();
 		// 传权限列表、角色、该角色选中的权限过去
 		transferDataOfPrivilegaMap();
 		role = roleService.findRoleById(role.getId());
@@ -80,11 +87,13 @@ public class RoleAction extends BaseAction {
 	}
 	
 	public String deleteRole() {
+		searchContent = role.getName();
 		roleService.delete(role.getId());
 		return "deleteRoleSuccess";
 	}
 
 	public String deleteSelectedRole() {
+		searchContent = role.getName();
 		for (String roleId : selectedRow) {
 			roleService.delete(roleId);
 		}
@@ -105,12 +114,6 @@ public class RoleAction extends BaseAction {
 	}
 	
 	/***************** 数据注入 *****************/
-	public void setRoleList(List<Role> roleList) {
-		this.roleList = roleList;
-	}
-	public List<Role> getRoleList() {
-		return roleList;
-	}
 	public void setRole(Role role) {
 		this.role = role;
 	}
@@ -122,5 +125,11 @@ public class RoleAction extends BaseAction {
 	}
 	public String[] getPrivilegeIdArray() {
 		return privilegeIdArray;
+	}
+	public void setSearchContent(String searchContent) {
+		this.searchContent = searchContent;
+	}
+	public String getSearchContent() {
+		return searchContent;
 	}
 }

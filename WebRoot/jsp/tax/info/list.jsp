@@ -58,6 +58,14 @@
   			}
   		});
   	}
+  	
+  	var list_url = "${basePath}/tax/info/listInfo.action";
+  	
+  	function doSearch() {
+  		$("#pageNo").val(1);
+  		document.forms[0].action = list_url;
+  		document.forms[0].submit();
+  	}
     </script>
 </head>
 
@@ -89,7 +97,7 @@
                             <td width="80" align="center">状态</td>
                             <td width="120" align="center">操作</td>
                         </tr>
-                        <s:iterator value="infoList" status="st">
+                        <s:iterator value="pageResult.items" status="st">
                             <tr <s:if test="#st.odd"> bgcolor="f8f8f8" </s:if> >
                                 <td align="center"><input type="checkbox" name="selectedRow" value="<s:property value='infoId'/>"/></td>
                                 <td align="center"><s:property value="title"/></td>
@@ -119,7 +127,8 @@
                     </table>
                 </div>
             </div>
-        <div class="c_pate" style="margin-top: 5px;">
+            <jsp:include page="/jsp/common/pageNavigator.jsp"></jsp:include>
+        <%--<div class="c_pate" style="margin-top: 5px;">
 		<table width="100%" class="pageDown" border="0" cellspacing="0"
 			cellpadding="0">
 			<tr>
@@ -133,7 +142,7 @@
 		</table>	
         </div>
 
-        </div>
+        --%></div>
     </div>
 </form>
 
