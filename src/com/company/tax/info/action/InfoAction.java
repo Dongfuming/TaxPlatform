@@ -44,6 +44,7 @@ public class InfoAction extends BaseAction {
 			info.setTitle(URLDecoder.decode(info.getTitle(), "utf-8"));
 			queryHelper.addCondition("i.title LIKE ?", "%" + info.getTitle() + "%");
 		}
+		queryHelper.addOrderByProperty("i.createTime", QueryHelper.ORDER_BY_DESC);
 		pageResult = infoService.getPageResult(queryHelper, getPageNo(), getPageSize());
 		return "listInfo";
 	}
