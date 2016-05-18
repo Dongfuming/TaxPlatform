@@ -13,9 +13,20 @@
 		
 			<result name="toSystemHomePage">/jsp/home/home.jsp</result>
 			
+			<result name="toAddComplainPage">/jsp/home/addComplain.jsp</result>
+			
+			<result name="addComplainSuccess" type="redirectAction">toSystemHomePage</result>
+			
 		</action>
 		
 	</package>
 	
-
+	<package name="system-home-json-action" namespace="/system/home" extends="json-default">
+		<action name="getUsersJsonWay2" class="com.company.home.action.HomeAction" method="getUsersJsonWay2">
+			<result type="json">
+				<param name="root">jsonMap</param>
+			</result>
+		</action>
+	</package>
+	
 </struts>

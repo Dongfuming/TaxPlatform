@@ -22,7 +22,7 @@ public class User {
 	private String email;
 	private Date birthday;
 	private String memo;
-	private List<UserRole> userRoleList;
+	private List<UserRole> userRoleList; // 一个用户，多个角色
 	
 	//用户状态
 	public static String USER_STATE_VALID = "1";//有效

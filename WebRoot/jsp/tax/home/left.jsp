@@ -74,7 +74,7 @@
                     <dt><a class="xxfb" href="${basePath }/tax/info/listInfo.action" target="mainFrame"><b></b>信息发布管理<s class="down"></s> </a></dt>
                 </dl>
                 <dl class="">
-                    <dt><a class="tssl" href="#" target="mainFrame"><b></b>投诉受理管理<s class="down"></s> </a></dt>
+                    <dt><a class="tssl" href="${basePath }/tax/complain/listComplain.action" target="mainFrame"><b></b>投诉受理管理<s class="down"></s> </a></dt>
                 </dl>
                 <dl class="">
                     <dt><a class="nszx" href="#" target="mainFrame"><b></b>纳税咨询管理<s class="down"></s> </a></dt>

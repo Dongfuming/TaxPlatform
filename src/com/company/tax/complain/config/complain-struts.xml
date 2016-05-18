@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+						<!-- 纳税服务之投诉受理管理 -->
+							
+	<package name="complain-package" extends="base-package" namespace="/tax/complain">
+	
+		<action name="*" class="com.company.tax.complain.action.ComplainAction" method="{1}">
+		
+			<result name="listComplain">/jsp/tax/complain/list.jsp</result>
+			
+			<result name="toDealComplainPage">/jsp/tax/complain/deal.jsp</result>
+			
+			<result name="dealComplainSuccess" type="redirectAction">listComplain</result>
+			
+			<result name="toYearStatisticChartPage">/jsp/tax/complain/yearStatisticChart.jsp</result>
+			
+			<!-- <result name="toEditInfoPage">/jsp/tax/info/edit.jsp</result>
+
+			<result name="editInfoSuccess" type="redirectAction">
+				<param name="actionName">listInfo</param>
+				<param name="info.title">${searchContent}</param>
+				<param name="encode">true</param>
+				<param name="pageNo">${pageNo}</param>
+			</result> -->
+			
+			<!-- 搜索后，删除一条，还要让界面保留搜索原貌，则必须把搜索内容传过去 -->
+			<!-- 若搜索内容为中文，处理编码问题 -->
+			<!-- 2016-05-16: 下面处理删除后，返回到了搜索结果的第一页，难道不是应该停留在删除页吗 -->
+			<!-- <result name="deleteInfoSuccess" type="redirectAction">
+				<param name="actionName">listInfo</param>
+				<param name="info.title">${searchContent}</param>
+				<param name="encode">true</param> 
+			</result>
+
+			<result name="deleteSelectedInfoSuccess" type="redirectAction">
+				<param name="actionName">listInfo</param>
+				<param name="info.title">${searchContent}</param>
+				<param name="encode">true</param>
+			</result> -->
+
+		</action>
+		
+	</package>
+	
+
+</struts>
