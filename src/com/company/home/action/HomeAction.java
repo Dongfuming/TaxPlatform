@@ -1,5 +1,6 @@
 package com.company.home.action;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
@@ -46,21 +47,16 @@ public class HomeAction extends ActionSupport {
 		return "toAddComplainPage";
 	}
 	
-	public String addComplain() {
-		System.out.println("添加投诉 = " + complain);
-		if (!complain.getIsNm()) { // 不匿名
-			User user = (User)ServletActionContext.getRequest().getSession().getAttribute(Constant.USER);
-			// 2015-05-18疑问：用户单位从哪来？
-			complain.setCompCompany(user.getAccount());
-			complain.setCompName(user.getName());
-			complain.setCompMobile(user.getMobile());
-		}
-		complain.setCompTime(new Timestamp(new Date().getTime()));
+	public void addComplain() throws Exception { 
 		complain.setState(Complain.COMPLAIN_STATE_UNDONE);
-		
+		complain.setCompTime(new Timestamp(new Date().getTime()));
 		complainService.save(complain);
 		
-		return "addComplainSuccess";
+		HttpServletResponse response = ServletActionContext.getResponse();
+		response.setContentType("text/html");
+		ServletOutputStream outputStream = response.getOutputStream();
+		outputStream.write("success".getBytes("utf-8"));
+		outputStream.close();
 	}
 	
 	// 方式一：输出流输出Json格式的文本内容

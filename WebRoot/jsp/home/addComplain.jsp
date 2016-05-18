@@ -44,11 +44,33 @@
     			$("#toCompName").empty();
     		}
     	}
+    	
+    	//提交表单
+    	function doSubmit() {
+    		//1、提交表单并保存
+			$.ajax({
+				url:"${basePath }/system/home/addComplain.action",
+				data:$("#form").serialize(),
+				type:"post",
+				async: false,
+				success: function(msg) {
+					if("success" == msg) {
+						//2、提示用户投诉成功
+						alert("投诉成功！");
+			    		//3、刷新父窗口
+						window.opener.parent.location.reload(true);
+			    		//4、关闭当前窗口
+			    		window.close();
+					} else {alert("投诉失败！");}
+				},
+				error: function(){alert("投诉失败！");}
+			});
+    	}
     </script>
     
 </head>
 <body>
-<form id="form" name="form" action="${basePath }/system/home/addComplain.action" method="post" enctype="multipart/form-data">
+<form id="form" name="form" action="" method="post" enctype="multipart/form-data">
     <div class="vp_d_1">
         <div style="width:1%;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
         <div class="vp_d_1_1">
@@ -80,9 +102,12 @@
             <td><s:radio name="complain.isNm" list="#{'0':'非匿名投诉','1':'匿名投诉' }" value="0"/></td>
         </tr>
     </table>
+    <s:hidden name="complain.compCompany" value="%{#session.LOGIN_USER.dept}"/>
+	<s:hidden name="complain.compName" value="%{#session.LOGIN_USER.name}"/>
+	<s:hidden name="complain.compMobile" value="%{#session.LOGIN_USER.mobile}"/>
 
     <div class="tc mt20">
-        <input type="submit" class="btnB2" value="保存" />
+        <input type="button" class="btnB2" value="保存" onclick="doSubmit()"/>
         &nbsp;&nbsp;&nbsp;&nbsp;
         <input type="button"  onclick="javascript:window.close()" class="btnB2" value="关闭" />
     </div>

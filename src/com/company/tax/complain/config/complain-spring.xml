@@ -14,5 +14,36 @@
 	<!-- 因为daoImpl继承了HibernateDaoSupport，需要手动给属性sessionFactory注入数据. service层中用到此bean -->
 	<bean id="complainDao" class="com.company.tax.complain.dao.impl.ComplainDaoImpl" parent="baseDao"></bean>
 
+	<!-- 定时自动受理投诉，1.导包 3.ComplainService增加方法 4.配置下面 -->
+	
+	<!-- 1、制定任务信息信息 -->
+	<bean id="complainJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<!-- 设置执行对象 -->
+		<property name="targetObject" ref="complainService"></property>
+		<!-- 设置执行对象中对应的执行方法 -->
+		<property name="targetMethod" value="autoDeal"></property>
+		<!-- 是否可以同步执行；不可同步执行 -->
+		<property name="concurrent" value="false"></property>
+	</bean>
+	
+     <!-- 2、制定任务执行时机（任务执行触发器） -->
+     <bean id="complainCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+     	<!-- 设置任务详细信息 -->
+     	<property name="jobDetail" ref="complainJobDetail"></property>
+						       	  <!-- 每月月底23点59分59秒执行autoDeal方法 -->
+						       	  <!-- 空格隔开，秒 分 时 日 月 周 年(可选填) -->
+     	<property name="cronExpression" value="59 59 23 L * ?"></property>
+     	<!-- 设置任务执行时间点，cronExpression: 在每月的月底下午的3点每分钟的第10秒执行任务 -->
+     	<!-- <property name="cronExpression" value="10 * 15 L * ?"></property> -->
+     </bean>
+     <!-- 3、设置调度工厂 -->
+     <bean id="complainScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+     	<property name="triggers">
+     		<list>
+     			<ref bean="complainCronTrigger"/>
+     		</list>
+     	</property>
+     </bean>
+
 </beans>
   

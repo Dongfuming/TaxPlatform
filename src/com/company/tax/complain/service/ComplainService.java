@@ -9,4 +9,6 @@ import com.company.tax.complain.entity.Complain;
  */
 public interface ComplainService extends BaseService<Complain> {
 	
+	// 自动受理投诉
+	public void autoDeal();
 }

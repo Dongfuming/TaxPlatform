@@ -13,12 +13,13 @@
 		
 			<result name="toLoginPage">/jsp/login/_login.jsp</result>
 
-			<result name="loginSuccess">/jsp/home/home.jsp</result>
-
 			<result name="toNoPrivilegePage">/jsp/login/noPrivilege.jsp</result>
 
-			<!-- 为什么用redirectAction跑不通呢？？？ namespace不能同名吗？？？ -->
- 			<!-- <result name="loginSuccess" type="redirectAction">toSystemHomePage</result> --> 
+			<result name="loginSuccess" type="redirectAction">
+				<param name="actionName">toSystemHomePage</param>
+				<param name="namespace">/system/home</param>
+				<!-- <param name="method">toSystemHomePage</param> -->
+			</result>
 			
 		</action>
 		
