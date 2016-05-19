@@ -43,7 +43,7 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:applicationContext.xml</param-value>
     </context-param>
-	
+    
   <display-name>TaxPlatform</display-name>	
   <welcome-file-list>
     <welcome-file>index.jsp</welcome-file>

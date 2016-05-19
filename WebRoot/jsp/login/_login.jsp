@@ -22,7 +22,12 @@
 	if(window != window.parent){
 		window.parent.location.reload(true);
 	}
-
+	
+	// 在纳税服务的首页中使用了frameset，当前用户的系统登录信息失效后,如果再点击左边的菜单，在右边的显示登录页面，而正确的应该是整个页面返回到登录页。
+	// 解决方案：在登录页面中使用js脚本判断，是否当前页面在框架内，即当前页面的窗口是否是顶级窗口，如果是子窗口，则刷新父窗口会跳到登录页面
+	if (window != window.parent) {
+		window.parent.location.reload(true);
+	}
 </script>
 
 <style type="text/css">

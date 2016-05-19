@@ -24,6 +24,8 @@ public class Constant {
 	
 	public static String DEFAULT_USER_PASSWORD = "123456";
 	public static String DEFAULT_USER_STATE = User.USER_STATE_VALID;
+	public static int DEFAULT_PAGE_SIZE = 3;
+	public static int DEFAULT_PAGE_NUMBER = 1;
 	
 	public static String USER = "LOGIN_USER"; 
 	

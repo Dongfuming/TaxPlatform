@@ -31,17 +31,15 @@ public class LoginAction extends ActionSupport {
 	
 	public String login() {
 		if(user != null) {
-			if(StringUtils.isNotBlank(user.getAccount()) && StringUtils.isNotBlank(user.getPassword()) ){
+			if(StringUtils.isNotBlank(user.getAccount()) && StringUtils.isNotBlank(user.getPassword()) ) {
 				List<User> list = userService.findUsersByAccountAndPassword(user.getAccount(), user.getPassword());
 				System.out.println("账号 ＝ " + user.getAccount() + "， 密码 ＝ " + user.getPassword() + "，个数 ＝ " + list.size());
+				
 				if(list != null && list.size() > 0) {
 					user = list.get(0);
 					user.setUserRoleList(userService.findUserRolesByUserId(user.getId()));
-					
 					saveUserInSession();
-					
 					//writeDownUserLogin();
-
 					return "loginSuccess";
 				} else { 
 					loginResult = "帐号或密码不正确！";
@@ -69,6 +67,7 @@ public class LoginAction extends ActionSupport {
 	}
 	
 	private void saveUserInSession() {
+		ServletActionContext.getRequest().getSession().setMaxInactiveInterval(1 * 60); // 以秒为单位
 		ServletActionContext.getRequest().getSession().setAttribute(Constant.USER, user);
 	}
 	
