@@ -1,8 +1,14 @@
 package com.company.tax.complain.service.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
+
+import org.hamcrest.core.IsInstanceOf;
 import org.springframework.stereotype.Service;
 import com.company.core.service.imple.BaseServiceImpl;
 import com.company.core.util.QueryHelper;
@@ -17,7 +23,6 @@ import com.company.tax.complain.service.ComplainService;
 @Service("complainService")
 public class ComplainServiceImpl extends BaseServiceImpl<Complain> implements ComplainService {
 	
-	@SuppressWarnings("unused")
 	private ComplainDao complainDao;
 	
 	@Resource
@@ -50,5 +55,43 @@ public class ComplainServiceImpl extends BaseServiceImpl<Complain> implements Co
 				this.update(complain);
 			}
 		}
+	}
+
+	/*
+	 1. json数据中需要有一年中12个月份和对应的投诉数，故在查询投诉时数需要根据年份查询，并且需要统计访年度的12个月的投诉数；
+	 2. 当统计的是非本年度的数据时，因为这是已经过去的时间，所以当某个月没有投诉时，图表中应该显示为0；
+	 3. 当统计的是当前年度的数据时，还未到的月份不可能有投诉数据，应该显示为空或者不显示。
+	 4. 在调用fusioncharts的js中，统计图表需要接受一定格式的json数据(在demo中有固定json格式), {label: xxx, value: xxx}
+	 */
+	@Override
+	public List<Map<String, Object>> getYearStatisticDataByYear(int year) {
+		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		List<Object[]> list = complainDao.getYearStatisticDataByYear(year);
+		if(list != null && list.size() > 0) {
+			Calendar cal = Calendar.getInstance();
+			boolean isThisYear = (cal.get(Calendar.YEAR) == year);
+			int thisMonth = cal.get(Calendar.MONTH) + 1; 
+
+			for(Object[] obj: list) {
+				System.out.println("月份obj[0] = " + obj[0] + ", 数量obj[1] = " 
+									+ obj[1] + ", 月份=Integer? " + (obj[0] instanceof Integer));
+
+				Map<String, Object> map = new HashMap<String, Object>();
+				int theMonth = Integer.valueOf((obj[0]) + ""); 
+				map.put("label", theMonth+ "月");
+				
+				if (isThisYear) { 
+					if(theMonth > thisMonth) { 
+						map.put("value", ""); 
+					} else { 
+						map.put("value", obj[1]);
+					}
+				} else { 
+					map.put("value", obj[1]);
+				}
+				resultList.add(map);
+			}
+		}
+		return resultList;
 	}
 }

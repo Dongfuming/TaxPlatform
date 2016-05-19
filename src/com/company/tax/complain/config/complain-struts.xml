@@ -6,7 +6,7 @@
 <struts>
 						<!-- 纳税服务之投诉受理管理 -->
 							
-	<package name="complain-package" extends="base-package" namespace="/tax/complain">
+	<package name="complain-package" extends="base-package, json-default" namespace="/tax/complain">
 	
 		<action name="*" class="com.company.tax.complain.action.ComplainAction" method="{1}">
 		
@@ -18,29 +18,9 @@
 			
 			<result name="toYearStatisticChartPage">/jsp/tax/complain/yearStatisticChart.jsp</result>
 			
-			<!-- <result name="toEditInfoPage">/jsp/tax/info/edit.jsp</result>
-
-			<result name="editInfoSuccess" type="redirectAction">
-				<param name="actionName">listInfo</param>
-				<param name="info.title">${searchContent}</param>
-				<param name="encode">true</param>
-				<param name="pageNo">${pageNo}</param>
-			</result> -->
-			
-			<!-- 搜索后，删除一条，还要让界面保留搜索原貌，则必须把搜索内容传过去 -->
-			<!-- 若搜索内容为中文，处理编码问题 -->
-			<!-- 2016-05-16: 下面处理删除后，返回到了搜索结果的第一页，难道不是应该停留在删除页吗 -->
-			<!-- <result name="deleteInfoSuccess" type="redirectAction">
-				<param name="actionName">listInfo</param>
-				<param name="info.title">${searchContent}</param>
-				<param name="encode">true</param> 
+			<result name="yearStatisticData" type="json">
+				<param name="root">statisticMap</param>
 			</result>
-
-			<result name="deleteSelectedInfoSuccess" type="redirectAction">
-				<param name="actionName">listInfo</param>
-				<param name="info.title">${searchContent}</param>
-				<param name="encode">true</param>
-			</result> -->
 
 		</action>
 		

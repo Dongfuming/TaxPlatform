@@ -85,6 +85,7 @@ public class HomeAction extends ActionSupport {
 		}
 	}
 	
+	// 方式二：struts输出Json格式的文本内容(需要在xml中配置)
 	public String getUsersJsonWay2() {
 		try {
 			String dept = ServletActionContext.getRequest().getParameter("dept"); // ajax传过来的
