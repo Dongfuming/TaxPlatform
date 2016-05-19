@@ -42,6 +42,7 @@
                 }
             });
         }
+        
     </script>
     <style>
         * {
@@ -77,19 +78,19 @@
                     <dt><a class="tssl" href="${basePath }/tax/complain/listComplain.action" target="mainFrame"><b></b>投诉受理管理<s class="down"></s> </a></dt>
                 </dl>
                 <dl class="">
-                    <dt><a class="nszx" href="#" target="mainFrame"><b></b>纳税咨询管理<s class="down"></s> </a></dt>
+                    <dt><a class="nszx" href="${basePath }/jsp/common/hint.jsp" target="mainFrame"><b></b>纳税咨询管理<s class="down"></s> </a></dt>
                 </dl>
                 <dl class="">
-                    <dt><a class="fwdc" href="#" target="mainFrame"><b></b>服务调查管理<s class="down"></s> </a></dt>
+                    <dt><a class="fwdc" href="${basePath }/jsp/common/hint.jsp" target="mainFrame"><b></b>服务调查管理<s class="down"></s> </a></dt>
                 </dl>
                 <dl class="">
-                    <dt><a class="ygz" href="#" target="mainFrame"><b></b>易告知管理<s class="down"></s> </a></dt>
+                    <dt><a class="ygz" href="${basePath }/jsp/common/hint.jsp" target="mainFrame"><b></b>易告知管理<s class="down"></s> </a></dt>
                 </dl>
                 <dl class="">
                     <dt><a class="fwyy" style="cursor: pointer;"><b></b>服务预约管理<s class="down"></s> </a></dt>
                     <dd id="fwyygl" style="display:none;">
-                        <a class="" href="#" target="mainFrame"><b></b>预约服务</a>
-                        <a class="" href="#" target="mainFrame"><b></b>预约事项</a>
+                        <a class="" href="${basePath }/jsp/common/hint.jsp" target="mainFrame"><b></b>预约服务</a>
+                        <a class="" href="${basePath }/jsp/common/hint.jsp" target="mainFrame"><b></b>预约事项</a>
                     </dd>
                 </dl>
             </div>

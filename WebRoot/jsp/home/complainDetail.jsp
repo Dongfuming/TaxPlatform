@@ -1,17 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ include file="/jsp/common/header.jsp" %>
+<%@ include file="/jsp/common/header.jsp"%>
 
 <html>
 <head>
-    <title>投诉受理管理</title>
+    <title>投诉信息</title>
 </head>
-
 <body class="rightBody">
-<form id="form" name="form" action="${basePath }/tax/complain/dealComplain.action" method="post" enctype="multipart/form-data">
-    <div class="p_d_1">
-        <div class="p_d_1_1">
+    <div class="vp_d_1">
+    <div style="width:1%;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
+        <div class="vp_d_1_1">
             <div class="content_info">
-    <div class="c_crumbs"><div><b></b><strong>投诉受理管理</strong>&nbsp;-&nbsp;投诉受理</div></div>
+    <div class="c_crumbs"><div><b></b><strong>工作主页</strong>&nbsp;-&nbsp;投诉信息</div></div>
     <div class="tableH2">投诉详细信息<span style="color:red;">(<s:property value="#complainStateMap[complain.state]"/>)</span></div>
     <table id="baseInfo" width="100%" align="center" class="list" border="0" cellpadding="0" cellspacing="0"  >
     	<tr><td colspan="2" align="center">投诉人信息</td></tr>
@@ -67,10 +66,9 @@
         <tr><td colspan="2" align="center">受理信息</td></tr>
         <tr>
             <td colspan="2">
-            	<s:if test="complain.complainReplySet.size > 0">
+            <s:if test="complain.complainReplySet.size > 0">
             	<s:iterator value="complain.complainReplySet" status="st">
-            		<fieldset style="border: solid 1px #c0c0c0;margin-top:5px;"><legend style="color:green;font-weight:bold;">
-            			回复<s:property value="#st.count"/>&nbsp;</legend>
+            		<fieldset style="border: solid 1px #c0c0c0;margin-top:5px;"><legend style="color:green;font-weight:bold;">回复<s:property value="#st.count"/>&nbsp;</legend>
 						<div style="width:100%; text-align:center;color:#ccc;maring-top:5px;">
 						回复部门：<s:property value="replyDept"/>&nbsp;&nbsp;
 						回复人：<s:property value="replyer"/>&nbsp;&nbsp;
@@ -87,39 +85,9 @@
             	</s:else>
             </td>
         </tr>
-        <tr><td colspan="2" align="center">受理操作</td></tr>
-        <tr>
-            <td class="tdBg">回复部门：</td>
-            <td>
-            <s:property value="#session.LOGIN_USER.dept"/>
-            <s:hidden name="reply.replyDept" value="%{#session.LOGIN_USER.dept}"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="tdBg">回复人：</td>
-            <td>
-            <s:property value="#session.LOGIN_USER.name"/>
-            <s:hidden name="reply.replyer" value="%{#session.SYS_USER.name}"/>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="tdBg" width="200px">回复内容：</td>
-            <td><s:textarea name="reply.replyContent" cols="90" rows="8" /></td>
-        </tr>
     </table>
-    <s:hidden name="complain.compId"/>
-    <div class="tc mt20">
-        <input type="submit" class="btnB2" value="保存" />
-        &nbsp;&nbsp;&nbsp;&nbsp;
-        <input type="button"  onclick="javascript:history.go(-1)" class="btnB2" value="返回" />
-       <br/>
-       <br/>
-       <br/>
-       <br/>
-       <br/>
+    </div></div>
+    <div style="width:1%;float:left;">&nbsp;&nbsp;&nbsp;&nbsp;</div>
     </div>
-    </div></div></div>
-</form>
 </body>
 </html>

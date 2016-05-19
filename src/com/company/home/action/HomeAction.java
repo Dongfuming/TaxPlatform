@@ -1,7 +1,9 @@
 package com.company.home.action;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +22,11 @@ import com.company.core.constant.Constant;
 import com.company.core.util.QueryHelper;
 import com.company.tax.complain.entity.Complain;
 import com.company.tax.complain.service.ComplainService;
+import com.company.tax.info.entity.Info;
+import com.company.tax.info.service.InfoService;
 import com.company.tax.user.entity.User;
 import com.company.tax.user.service.UserService;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
@@ -32,76 +37,126 @@ import com.opensymphony.xwork2.ActionSupport;
 @SuppressWarnings("serial")
 public class HomeAction extends ActionSupport {
 
-	private Complain complain; // 接收‘我要投诉’传过来的数据
 	@Resource
-	private ComplainService complainService; // ‘我要投诉’功能使用
+	private ComplainService complainService; 
 	@Resource
-	private UserService userService; // ‘我要投诉’查看部门及其下人员
+	private UserService userService; 
+	@Resource
+	private InfoService infoService; 
+	private Complain complain; 
+	private Info info;
 	private Map<String, Object> jsonMap;
 	
+	/*
+	 1. 个人资料--从session里面拿
+	 2. 信息列表--查询最新5条发布状态的信息，显示在页面中，点击信息标题可查看具体信息
+	 3. 我的投诉--查询当前用户投诉的前6条数据，显示在页面中，点击投诉标题可查看投诉信息
+	 */
 	public String toSystemHomePage() {
+		transferDataOfInfoList();
+		transferDataOfComplainList();
 		return "toSystemHomePage";
+	}
+	
+	public String toInfoDetailPage() {
+		info = infoService.findObjectById(info.getInfoId());
+		transferDataOfInfoTypeMap();
+		return "toInfoDetailPage";
+	}
+	
+	public String toComplainDetailPage() {
+		complain = complainService.findObjectById(complain.getCompId());
+		transferDataOfComplainStateMap();
+		System.out.println("点击的投诉 ＝ " + complain);
+		return "toComplainDetailPage";
 	}
 	
 	public String toAddComplainPage() {
 		return "toAddComplainPage";
 	}
 	
-	public void addComplain() throws Exception { 
+	public void addComplain() { 
 		complain.setState(Complain.COMPLAIN_STATE_UNDONE);
 		complain.setCompTime(new Timestamp(new Date().getTime()));
 		complainService.save(complain);
 		
-		HttpServletResponse response = ServletActionContext.getResponse();
-		response.setContentType("text/html");
-		ServletOutputStream outputStream = response.getOutputStream();
-		outputStream.write("success".getBytes("utf-8"));
-		outputStream.close();
+		writeOutStream("success");
 	}
 	
-	// 方式一：输出流输出Json格式的文本内容
+	// 方式1：输出流输出json文本
 	public void getUsersJsonWay1() {
-		try {
-			String dept = ServletActionContext.getRequest().getParameter("dept"); // ajax传过来的
-			System.out.println("\ndept = " + dept);
-			if(StringUtils.isNotBlank(dept)) { 
-				QueryHelper queryHelper = new QueryHelper(User.class, "u"); 
-				queryHelper.addCondition("u.dept = ?", dept); 
-				List<User> userList = userService.findObjects(queryHelper);
-				
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("msg", "success");
-				jsonObject.accumulate("userList", userList);
-				
-				HttpServletResponse response = ServletActionContext.getResponse();
-				response.setContentType("text/html");
-				ServletOutputStream outputStream = response.getOutputStream();
-				outputStream.write(jsonObject.toString().getBytes("utf-8"));
-				outputStream.close();
-				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		String dept = ServletActionContext.getRequest().getParameter("dept"); // ajax
+		if(StringUtils.isNotBlank(dept)) { 
+			List<User> userList = getUserListWithDept(dept);
+
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("msg", "success");
+			jsonObject.accumulate("userList", userList);
+
+			writeOutStream(jsonObject.toString());
 		}
 	}
-	
-	// 方式二：struts输出Json格式的文本内容(需要在xml中配置)
+
+	// 方式2：struts输出json文本
 	public String getUsersJsonWay2() {
-		try {
-			String dept = ServletActionContext.getRequest().getParameter("dept"); // ajax传过来的
-			if(StringUtils.isNotBlank(dept)) { 
-				QueryHelper queryHelper = new QueryHelper(User.class, "u"); 
-				queryHelper.addCondition("u.dept = ?", dept); 
-				List<User> userList = userService.findObjects(queryHelper);
-				
-				jsonMap = new HashMap<String, Object>();
-				jsonMap.put("msg", "success");
-				jsonMap.put("userList", userList);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		String dept = ServletActionContext.getRequest().getParameter("dept"); 
+		if(StringUtils.isNotBlank(dept)) { 
+			List<User> userList = getUserListWithDept(dept);
+
+			jsonMap = new HashMap<String, Object>();
+			jsonMap.put("msg", "success");
+			jsonMap.put("userList", userList);
 		}
 		return SUCCESS;
+	}
+
+	private void transferDataOfInfoList() {
+		ActionContext.getContext().getContextMap().put("infoTypeMap", Info.INFO_TYPE_MAP);
+		QueryHelper queryHelper1 = new QueryHelper(Info.class, "i");
+		queryHelper1.addOrderByProperty("i.createTime", QueryHelper.ORDER_BY_DESC);
+		List<Object> infoList = infoService.getPageResult(queryHelper1, 1, 5).getItems();
+		
+		ActionContext.getContext().getContextMap().put("infoList", infoList);
+	}
+	
+	private void transferDataOfComplainStateMap() {
+		ActionContext.getContext().getContextMap().put("complainStateMap", Complain.COMPLAIN_STATE_MAP);
+	}
+	
+	private void transferDataOfComplainList() {
+		User user = (User) ServletActionContext.getRequest().getSession().getAttribute(Constant.USER);
+		
+		QueryHelper queryHelper = new QueryHelper(Complain.class, "c");
+		queryHelper.addCondition("c.compName = ?", user.getName());
+		queryHelper.addOrderByProperty("c.compTime", QueryHelper.ORDER_BY_ASC);
+		queryHelper.addOrderByProperty("c.state", QueryHelper.ORDER_BY_DESC);
+		List<Object> complainList = complainService.getPageResult(queryHelper, 1, 6).getItems();
+		
+		ActionContext.getContext().getContextMap().put("complainList", complainList);
+		transferDataOfComplainStateMap();
+	}
+	
+	private void transferDataOfInfoTypeMap() {
+		ActionContext.getContext().getContextMap().put("infoTypeMap", Info.INFO_TYPE_MAP);
+	}
+	
+	private void writeOutStream(String objString) {
+		try {
+			HttpServletResponse response = ServletActionContext.getResponse();
+			response.setContentType("text/html");
+			ServletOutputStream outputStream = response.getOutputStream();
+			outputStream.write(objString.getBytes("utf-8"));
+			outputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} 
+	}
+	
+	private List<User> getUserListWithDept(String dept) {
+		QueryHelper queryHelper = new QueryHelper(User.class, "u"); 
+		queryHelper.addCondition("u.dept = ?", dept); 
+		List<User> userList = userService.findObjects(queryHelper);
+		return userList;
 	}
 	
 	public void setComplain(Complain complain) {
@@ -115,5 +170,11 @@ public class HomeAction extends ActionSupport {
 	}
 	public Map<String, Object> getJsonMap() {
 		return jsonMap;
+	}
+	public void setInfo(Info info) {
+		this.info = info;
+	}
+	public Info getInfo() {
+		return info;
 	}
 }

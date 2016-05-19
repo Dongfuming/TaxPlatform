@@ -1,7 +1,9 @@
 package com.company.tax.complain.action;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,13 +37,57 @@ public class ComplainAction extends BaseAction {
 	private String endTime; // 搜索-结束时间
 	private Map<String, Object> statisticMap; // 查看统计时ajax传json过去
 	
-	/** 
-	 * 1. 若complain或startTime或endTime不为空，说明是带条件的搜索功能
-	 * 2. 若这些属性都为空，则是查询全部
-	 * 3. 排序设为：状态升序，投诉时间升序
+	/* 
+	 1. 若complain或startTime或endTime不为空，说明是带条件的搜索功能
+	 2. 若这些属性都为空，则是查询全部
+	 3. 排序设为：状态升序，投诉时间升序
 	 */
 	public String listComplain() throws Exception {
+		transferDataOfPageResult();
+		transferDataOfComplainStateMap();
+		return "listComplain";
+	}
+
+	public String toDealComplainPage() {
+		complain = complainService.findObjectById(complain.getCompId());
+		transferDataOfComplainStateMap();
+		return "toDealComplainPage";
+	}
+
+	public String dealComplain() {
+		complain = complainService.findObjectById(complain.getCompId());
+		updateComplainState();
+		saveComplainReply();
+		return "dealComplainSuccess";
+	}
+
+	public String toYearStatisticChartPage() { 
+		return "toYearStatisticChartPage";
+	}
+	
+	public String getYearStatisticData() throws Exception {
+		HttpServletRequest request = ServletActionContext.getRequest();
+		int year = Integer.valueOf(request.getParameter("year")).intValue();
+		statisticMap = new HashMap<String, Object>();
+		statisticMap.put("msg", "success");
+		statisticMap.put("chartData", complainService.getYearStatisticDataByYear(year));
+		return "yearStatisticData";
+	}
+	
+	private void transferDataOfComplainStateMap() {
+		ActionContext.getContext().getContextMap().put("complainStateMap", Complain.COMPLAIN_STATE_MAP);
+	}
+	
+	private void transferDataOfPageResult() throws Exception {
 		QueryHelper queryHelper = new QueryHelper(Complain.class, "c");
+		addConditionWithQueryHelper(queryHelper);
+		queryHelper.addOrderByProperty("c.state", QueryHelper.ORDER_BY_ASC);
+		queryHelper.addOrderByProperty("c.compTime", QueryHelper.ORDER_BY_ASC);
+		pageResult = complainService.getPageResult(queryHelper, getPageNo(), getPageSize());
+	}
+	
+	private void addConditionWithQueryHelper(QueryHelper queryHelper)
+			throws Exception {
 		if(StringUtils.isNotBlank(startTime)) {
 			startTime = URLDecoder.decode(startTime, "utf-8");
 			queryHelper.addCondition("c.compTime >= ?", DateUtils.parseDate(startTime+":00", "yyyy-MM-dd HH:mm:ss"));
@@ -58,51 +104,19 @@ public class ComplainAction extends BaseAction {
 				queryHelper.addCondition("c.state=?", complain.getState());
 			}
 		}
-		queryHelper.addOrderByProperty("c.state", QueryHelper.ORDER_BY_ASC);
-		queryHelper.addOrderByProperty("c.compTime", QueryHelper.ORDER_BY_ASC);
-		pageResult = complainService.getPageResult(queryHelper, getPageNo(), getPageSize());
-		transferDataOfComplainStateMap();
-		return "listComplain";
 	}
 	
-	public String toDealComplainPage() {
-		complain = complainService.findObjectById(complain.getCompId());
-		transferDataOfComplainStateMap();
-		return "toDealComplainPage";
-	}
-	
-	/** 
-	 * 1.更新投诉状态  
-	 * 2.保存回复 
-	 */
-	public String dealComplain() {
-		complain = complainService.findObjectById(complain.getCompId());
-		if ( ! Complain.COMPLAIN_STATE_DONE.equals(complain.getState())) {
-			complain.setState(Complain.COMPLAIN_STATE_DONE);
-		}
+	private void saveComplainReply() {
 		reply.setComplain(complain);
 		reply.setReplyTime(new Timestamp(new Date().getTime()));
 		complain.getComplainReplySet().add(reply);
 		complainService.update(complain);
-		
-		return "dealComplainSuccess";
 	}
-	
-	public String toYearStatisticChartPage() { 
-		return "toYearStatisticChartPage";
-	}
-	
-	public String getYearStatisticData() throws Exception {
-		HttpServletRequest request = ServletActionContext.getRequest();
-		int year = Integer.valueOf(request.getParameter("year")).intValue();
-		statisticMap = new HashMap<String, Object>();
-		statisticMap.put("msg", "success");
-		statisticMap.put("chartData", complainService.getYearStatisticDataByYear(year));
-		return "yearStatisticData";
-	}
-	
-	private void transferDataOfComplainStateMap() {
-		ActionContext.getContext().getContextMap().put("complainStateMap", Complain.COMPLAIN_STATE_MAP);
+
+	private void updateComplainState() {
+		if ( ! Complain.COMPLAIN_STATE_DONE.equals(complain.getState())) {
+			complain.setState(Complain.COMPLAIN_STATE_DONE);
+		}
 	}
 	
 	public void setComplain(Complain complain) {

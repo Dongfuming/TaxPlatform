@@ -5,6 +5,16 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
 	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 	
+	<!-- 首页投诉详情懒加载异常 -->
+	<filter>
+		<filter-name>openSessionInViewFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>openSessionInViewFilter</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+	
 	<!-- 权限过滤器(*注意：此过滤器必须先放到struts2过滤器之前) -->
 	<filter>
 	 	<filter-name>loginFilter</filter-name>

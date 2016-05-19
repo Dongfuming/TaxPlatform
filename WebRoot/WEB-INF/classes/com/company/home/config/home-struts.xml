@@ -15,6 +15,10 @@
 			
 			<result name="toAddComplainPage">/jsp/home/addComplain.jsp</result>
 			
+			<result name="toInfoDetailPage">/jsp/home/infoDetail.jsp</result>
+			
+			<result name="toComplainDetailPage">/jsp/home/complainDetail.jsp</result>
+			
 			<result name="addComplainSuccess" type="redirectAction">toSystemHomePage</result>
 			
 		</action>

@@ -8,6 +8,13 @@
     <title>国税协同办公平台</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <link href="${basePath}/css/home.css" rel="stylesheet" type="text/css" />
+    
+    <script type="text/javascript">
+    function showBeingDevelopAlert() {
+    	alert("功能开发中...\n‘纳税服务’可以点击");
+    }
+    
+    </script>
 </head>
 
 <body>
@@ -83,11 +90,11 @@
 <div class="menu">
     <ul class="clearfix">
         <li class="hover"><a href="javascript:void(0);">工作主页</a></li>
-        <li><a href="javascript:void(0);">行政管理</a></li>
-        <li><a href="javascript:void(0);">后勤服务</a></li>
-        <li><a href="javascript:void(0);">在线学习</a></li>       
+        <li><a href="javascript:showBeingDevelopAlert();">行政管理</a></li>
+        <li><a href="javascript:showBeingDevelopAlert();">后勤服务</a></li>
+        <li><a href="javascript:showBeingDevelopAlert();">在线学习</a></li>       
         <li><a href="${basePath }/tax/home/toTaxHomePage.action">纳税服务</a> </li>
-        <li><a href="javascript:void(0);">我的空间</a></li>
+        <li><a href="javascript:showBeingDevelopAlert();">我的空间</a></li>
     </ul>
 </div>
 <!-- }导航 -->
@@ -104,16 +111,16 @@
                     <td width="76" height="100" align="center" valign="middle">
                         <div class="left-tx">
                             
-							<img src="${basePath}/images/home/gs09.png" width="70" height="70" />
+							<img src="${basePath}/upload/${sessionScope.LOGIN_USER.headImg }" width="70" height="70" />
                         </div>
                     </td>
                     <td width="5%"><img src="${basePath}/images/home/gs10.png" width="4" height="59" alt="" /></td>
                     <td width="60%"><table width="95%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
-                            <td colspan="2" style=" font-weight:bold; color:#3a7daa;">xx名</td>
+                            <td colspan="2" style=" font-weight:bold; color:#3a7daa;"><s:property value="#session.LOGIN_USER.name"/></td>
                         </tr>
                         <tr>
-                            <td colspan="2">所属部门：xx部门</td>
+                            <td colspan="2">所属部门：${sessionScope.LOGIN_USER.dept }</td>
                         </tr>
                     </table>
                     </td>
@@ -131,16 +138,21 @@
                 <h1>信息列表</h1>
             </div>
             <table width="98%" border="0" align="center">
-            	
+                <s:iterator value="#infoList">
                 <tr>
                     <td height="23">
-                    xx标题
+                    <s:url var="infoDetailPageURL" action="toInfoDetailPage" namespace="/system/home" >
+                    	<s:param name="info.infoId"><s:property value="infoId"/></s:param>
+                    </s:url>
+                    <s:a href="%{#infoDetailPageURL}" target="_blank">
+                    	<s:property value="title"/>
+                   	</s:a>
                     </td>
-                    <td width="150px">xx分类</td>
-                    <td width="150px">xx创建人</td>
-                    <td width="150px">xx创建时间</td>
+                    <td width="150px"><s:property value="#infoTypeMap[type]"/></td>
+                    <td width="150px"><s:property value="creator"/></td>
+                    <td width="150px"><s:date name="createTime" format="yyyy-MM-dd HH:mm"/></td>
                 </tr>
-                
+                </s:iterator>
             </table>
         </div>
     </div>
@@ -156,16 +168,21 @@
                 </div>
             </div>
             <table width="98%" border="0" align="center">
-                
+                <s:iterator value="#complainList">
                 <tr>
                     <td height="23">
-                    xxx标题
+                    <s:url var="complainDetailPageURL" action="toComplainDetailPage" namespace="/system/home" >
+                    	<s:param name="complain.compId"><s:property value="compId"/></s:param>
+                    </s:url>
+                    <s:a href="%{#complainDetailPageURL}" target="_blank">
+                    	<s:property value="compTitle"/>
+                   	</s:a>
                     </td>
-                    <td width="180px">xx受理状态</td>
-                    <td width="180px">是否匿名投诉</td>
-                    <td width="180px">投诉时间</td>
+                    <td width="180px"><s:property value="#complainStateMap[state]"/></td>
+                    <td width="180px"><s:property value="isNm?'匿名投诉':'非匿名投诉'"/></td>
+                    <td width="180px"><s:date name="compTime" format="yyyy-MM-dd HH:mm"/></td>
                 </tr>
-                
+                </s:iterator>
             </table>
         </div>
 
