@@ -1,8 +1,6 @@
 package com.company.tax.complain.entity;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -25,18 +23,6 @@ public class Complain {
 	private String state; // 状态
 	private Set<ComplainReply> complainReplySet; // 一个投诉，多个回复
 	
-	public static String COMPLAIN_STATE_UNDONE = "0";
-	public static String COMPLAIN_STATE_DONE = "1";
-	public static String COMPLAIN_STATE_INVALID = "2";
-	public static Map<String, String> COMPLAIN_STATE_MAP;
-	
-	static {
-		COMPLAIN_STATE_MAP = new HashMap<String, String>();
-		COMPLAIN_STATE_MAP.put(COMPLAIN_STATE_UNDONE, "待受理");
-		COMPLAIN_STATE_MAP.put(COMPLAIN_STATE_DONE, "已受理");
-		COMPLAIN_STATE_MAP.put(COMPLAIN_STATE_INVALID, "已失效");
-	}
-
 	public Complain() { }
 
 	public Complain(String compTitle) {
@@ -140,6 +126,4 @@ public class Complain {
 				+ ", toCompDept=" + toCompDept + ", compContent=" + compContent
 				+ "]";
 	}
-	
-	
 }

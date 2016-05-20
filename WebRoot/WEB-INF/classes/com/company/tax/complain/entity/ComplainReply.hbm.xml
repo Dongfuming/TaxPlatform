@@ -7,7 +7,7 @@
 	
 		 <id name="replyId" type="java.lang.String">
             <column name="reply_id" length="32" />
-            <generator class="uuid.hex" />
+            <generator class="uuid" />
         </id>
         
         <property name="replyer" type="java.lang.String">

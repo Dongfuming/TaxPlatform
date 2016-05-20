@@ -9,7 +9,10 @@ import com.company.test.entity.Person;
  * 2016-5-6 下午2:45:52 
  */
 public interface TestService {
+	
 	public void testFunc();
+	
 	public boolean savePerson(Person person);
+	
 	public Person findPersonById(Serializable id);
 }

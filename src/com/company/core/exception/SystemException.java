@@ -1,7 +1,7 @@
 package com.company.core.exception;
 
 /**
- * 系统异常
+ * 总的系统异常类
  * @author Dongfuming
  * @date 2016-5-11 上午10:05:13
  */

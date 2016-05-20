@@ -9,6 +9,7 @@ import com.company.core.service.BaseService;
 import com.company.core.util.QueryHelper;
 
 /**
+ * 增、删、改、查的业务操作实现
  * @author Dongfuming
  * @date 2016-5-16 上午11:34:45
  */
@@ -16,7 +17,7 @@ public class BaseServiceImpl<T> implements BaseService<T> {
 
 	private BaseDao<T> baseDao; // 通过子类注入
 	
-	public void setBaseDao(BaseDao<T> baseDao) {
+	public void setBaseDao(BaseDao<T> baseDao) { // !!! 子类实例化时必须调用此方法
 		this.baseDao = baseDao;
 	}
 	

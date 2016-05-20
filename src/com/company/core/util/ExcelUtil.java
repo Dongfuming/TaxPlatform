@@ -12,7 +12,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import com.company.tax.user.entity.User;
 
 /**
- * 导入/出用户excel 
+ * '纳税服务'之用户管理，导入/出用户excel 
  * @author Dongfuming
  * @date 2016-5-10 下午4:35:49
  */
@@ -102,6 +102,7 @@ public class ExcelUtil {
 		font.setFontHeightInPoints(fontSize);
 		//加载字体
 		style.setFont(font);
+		
 		return style;
 	}
 

@@ -14,12 +14,10 @@
     
     <frameset rows="156,*" cols="*" frameborder="no" border="0" framespacing="0">
     	<!-- 上面部分 -->
-        <%-- <frame src="${basePath }/tax/home/toTaxHomePageTop.action" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" /> --%>
         <frame src="${basePath }/jsp/tax/home/top.jsp" name="topFrame" scrolling="No" noresize="noresize" id="topFrame" />
         
         <frameset cols="14%,60%" frameborder="no" border="0" framespacing="0">
         	<!-- 左边部分 -->
-            <%-- <frame src="${basePath }/tax/home/toTaxHomePageLeft.action" scrolling="yes" noresize="noresize" id="leftFrame" /> --%> 
 			<frame src="${basePath }/jsp/tax/home/left.jsp" scrolling="yes" noresize="noresize" id="leftFrame" />
 			
             <!-- 中间部分--logo图片 -->

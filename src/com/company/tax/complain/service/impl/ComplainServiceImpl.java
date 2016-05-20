@@ -8,8 +8,9 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.hamcrest.core.IsInstanceOf;
 import org.springframework.stereotype.Service;
+
+import com.company.core.constant.Constant;
 import com.company.core.service.imple.BaseServiceImpl;
 import com.company.core.util.QueryHelper;
 import com.company.tax.complain.dao.ComplainDao;
@@ -45,13 +46,13 @@ public class ComplainServiceImpl extends BaseServiceImpl<Complain> implements Co
 		
 		// 查询本月1号0时0分0秒之前的投诉，设为失效
 		QueryHelper queryHelper = new QueryHelper(Complain.class, "c");
-		queryHelper.addCondition("c.state=?", Complain.COMPLAIN_STATE_UNDONE);
+		queryHelper.addCondition("c.state=?", Constant.COMPLAIN_STATE_UNDONE);
 		queryHelper.addCondition("c.compTime < ?", cal.getTime()); 
 
 		List<Complain> list = findObjects(queryHelper);
-		if(list != null && list.size() > 0){
+		if(list != null && list.size() > 0) {
 			for(Complain complain: list){
-				complain.setState(Complain.COMPLAIN_STATE_INVALID);
+				complain.setState(Constant.COMPLAIN_STATE_INVALID);
 				this.update(complain);
 			}
 		}
@@ -66,6 +67,7 @@ public class ComplainServiceImpl extends BaseServiceImpl<Complain> implements Co
 	@Override
 	public List<Map<String, Object>> getYearStatisticDataByYear(int year) {
 		List<Map<String, Object>> resultList = new ArrayList<Map<String, Object>>();
+		
 		List<Object[]> list = complainDao.getYearStatisticDataByYear(year);
 		if(list != null && list.size() > 0) {
 			Calendar cal = Calendar.getInstance();
@@ -73,12 +75,9 @@ public class ComplainServiceImpl extends BaseServiceImpl<Complain> implements Co
 			int thisMonth = cal.get(Calendar.MONTH) + 1; 
 
 			for(Object[] obj: list) {
-				System.out.println("月份obj[0] = " + obj[0] + ", 数量obj[1] = " 
-									+ obj[1] + ", 月份=Integer? " + (obj[0] instanceof Integer));
-
 				Map<String, Object> map = new HashMap<String, Object>();
 				int theMonth = Integer.valueOf((obj[0]) + ""); 
-				map.put("label", theMonth+ "月");
+				map.put("label", theMonth + "月");
 				
 				if (isThisYear) { 
 					if(theMonth > thisMonth) { 
@@ -92,6 +91,7 @@ public class ComplainServiceImpl extends BaseServiceImpl<Complain> implements Co
 				resultList.add(map);
 			}
 		}
+		
 		return resultList;
 	}
 }

@@ -1,8 +1,8 @@
 package com.company.tax.role.action;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.HashSet;
-import java.util.List;
 
 import javax.annotation.Resource;
 
@@ -30,36 +30,60 @@ public class RoleAction extends BaseAction {
 	private String[] privilegeIdArray; // 新增角色的权限数组
 	private String searchContent; // 暂存搜索内容
 	
-	public String listRole() throws Exception {
+	public String listRole() {
 		transferDataOfPrivilegaMap();
-		QueryHelper queryHelper = new QueryHelper(Role.class, "r");
-		try {
-			if(role != null && StringUtils.isNotBlank(role.getName())) { // 搜索
-				role.setName(URLDecoder.decode(role.getName(), "utf-8"));
-				queryHelper.addCondition("r.name LIKE ?", "%" + role.getName() + "%");
-			}
-			pageResult = roleService.getPageResult(queryHelper, getPageNo(), getPageSize());
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
+		transferDataOfPageResult();
+		
 		return "listRole";
 	}
-	
+
 	public String toAddRolePage() {
 		transferDataOfPrivilegaMap();
+		
 		return "toAddRolePage";
 	}
 	
 	public String addRole() {
-		System.out.println("新增的角色 = " + role);
-		System.out.println("权限 = " + privilegeIdArray);
 		savePrivilegeInRole();
 		roleService.save(role);
 		
 		return "addRoleSuccess";
 	}
 
-	// 保存权限
+	// 传权限列表、角色、该角色选中的权限过去
+	public String toEditRolePage() {
+		searchContent = role.getName();
+		transferDataOfPrivilegaMap();
+		role = roleService.findObjectById(role.getId());
+		transferDataOfPrivilegaIdArray();
+		
+		return "toEditRolePage";
+	}
+	
+	public String editRole() {
+		savePrivilegeInRole();
+		roleService.update(role);
+		
+		return "editRoleSuccess";
+	}
+	
+	public String deleteRole() {
+		searchContent = role.getName();
+		roleService.delete(role.getId());
+		
+		return "deleteRoleSuccess";
+	}
+
+	public String deleteSelectedRole() {
+		searchContent = role.getName();
+		for (String roleId : selectedRow) {
+			roleService.delete(roleId);
+		}
+		
+		return "deleteSelectedRoleSuccess";
+	}
+	
+	/***************** private method *****************/
 	private void savePrivilegeInRole() {
 		HashSet<RolePrivilege> set = new HashSet<RolePrivilege>();
 		for(int i = 0; i < privilegeIdArray.length; i++) {
@@ -70,37 +94,19 @@ public class RoleAction extends BaseAction {
 		role.setRolePrivilegeSet(set);
 	}
 	
-	public String toEditRolePage() {
-		searchContent = role.getName();
-		// 传权限列表、角色、该角色选中的权限过去
-		transferDataOfPrivilegaMap();
-		role = roleService.findRoleById(role.getId());
-		transferDataOfPrivilegaIdArray();
-		
-		return "toEditRolePage";
-	}
-	
-	public String editRole() {
-		savePrivilegeInRole();
-		roleService.update(role);
-		return "editRoleSuccess";
-	}
-	
-	public String deleteRole() {
-		searchContent = role.getName();
-		roleService.delete(role.getId());
-		return "deleteRoleSuccess";
-	}
-
-	public String deleteSelectedRole() {
-		searchContent = role.getName();
-		for (String roleId : selectedRow) {
-			roleService.delete(roleId);
+	private void transferDataOfPageResult() {
+		try {
+			QueryHelper queryHelper = new QueryHelper(Role.class, "r");
+			if(role != null && StringUtils.isNotBlank(role.getName())) { // 搜索
+				role.setName(URLDecoder.decode(role.getName(), "utf-8"));
+				queryHelper.addCondition("r.name LIKE ?", "%" + role.getName() + "%");
+			}
+			pageResult = roleService.getPageResult(queryHelper, getPageNo(), getPageSize());
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
 		}
-		return "deleteSelectedRoleSuccess";
 	}
 	
-	/***************** private method *****************/
 	private void transferDataOfPrivilegaMap() {
 		ActionContext.getContext().getContextMap().put("privilegeMap", Constant.PRIVILEGE_MAP);
 	}
@@ -113,7 +119,7 @@ public class RoleAction extends BaseAction {
 		}
 	}
 	
-	/***************** 数据注入 *****************/
+	/***************** setter / getter *****************/
 	public void setRole(Role role) {
 		this.role = role;
 	}

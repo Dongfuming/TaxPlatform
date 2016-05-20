@@ -18,7 +18,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import com.company.core.constant.Constant;
-import com.company.core.exception.ServiceException;
 import com.company.core.service.imple.BaseServiceImpl;
 import com.company.core.util.ExcelUtil;
 import com.company.tax.role.entity.Role;
@@ -43,31 +42,14 @@ public class UserSeviceImpl extends BaseServiceImpl<User> implements UserService
 		this.userDao = userDao;
 	}
 	
-	@Override
-	public void save(User user) {
-		userDao.save(user);
-	}
-
-	@Override
-	public void update(User user) {
-		userDao.update(user);
-	}
-
+	/*
+	 * 1. 先删用户角色
+	 * 2. 再删用户
+	 */
 	@Override
 	public void delete(Serializable userId) {
-		// 先删用户角色，再删用户
 		userDao.deleteUserRolesByUserId((String)userId);
 		userDao.delete(userId);
-	}
-
-	@Override
-	public User findUserById(Serializable id) {
-		return userDao.findObjectById(id);
-	}
-
-	@Override
-	public List<User> findUsers() throws ServiceException {
-		return userDao.findObjects();
 	}
 
 	@Override
@@ -82,7 +64,8 @@ public class UserSeviceImpl extends BaseServiceImpl<User> implements UserService
 			FileInputStream fileInputStream = new FileInputStream(userExcel);
 			boolean is03Excel = userExcelFileName.matches("^.+\\.(?i)(xls)$");
 			// 读取工作簿
-			Workbook workbook = is03Excel ? new HSSFWorkbook(fileInputStream):new XSSFWorkbook(fileInputStream);
+			Workbook workbook = is03Excel ? (new HSSFWorkbook(fileInputStream)) : 
+											(new XSSFWorkbook(fileInputStream));
 			// 读取工作表
 			Sheet sheet = workbook.getSheetAt(0);
 			// 读取行
@@ -108,14 +91,17 @@ public class UserSeviceImpl extends BaseServiceImpl<User> implements UserService
 
 	@Override
 	public void saveUserAndRoles(User user, String... roleIdArray) {
-		// 先保存用户，再保存用户角色
 		save(user);
 		saveUserRole(user, roleIdArray);
 	}
 
+	/*
+	 * 1. 先删除之前的用户角色
+	 * 2. 然后更新用户
+	 * 3. 再保存现在的用户角色
+	 */
 	@Override
 	public void updateUserAndRoles(User user, String... roleIdArray) {
-		// 先删除之前的用户角色，然后更新用户，再保存现在的用户角色
 		userDao.deleteUserRolesByUserId(user.getId());
 		update(user);
 		saveUserRole(user, roleIdArray);
@@ -126,7 +112,13 @@ public class UserSeviceImpl extends BaseServiceImpl<User> implements UserService
 		return userDao.findUserRolesByUserId(userId);
 	}
 	
-	/*************** private ***************/
+	@Override
+	public List<User> findUsersByAccountAndPassword(String account,
+			String password) {
+		return userDao.findUsersByAccountAndPassword(account, password);
+	}
+	
+	/*************** private method ***************/
 	private User createUserWithRow(Row row) {
 		User user = new User();
 		// 用户名
@@ -174,11 +166,5 @@ public class UserSeviceImpl extends BaseServiceImpl<User> implements UserService
 				userDao.saveUserRole(aUserRole);
 			}
 		}
-	}
-
-	@Override
-	public List<User> findUsersByAccountAndPassword(String account,
-			String password) {
-		return userDao.findUsersByAccountAndPassword(account, password);
 	}
 }

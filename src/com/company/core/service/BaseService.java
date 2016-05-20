@@ -8,6 +8,7 @@ import com.company.core.util.QueryHelper;
 
 
 /**
+ * 定义增、删、改、查的业务操作
  * @author Dongfuming
  * @date 2016-5-16 上午11:33:12
  */

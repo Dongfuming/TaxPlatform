@@ -2,6 +2,8 @@ package com.company.login.action;
 
 import java.util.List;
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,38 +30,49 @@ public class LoginAction extends ActionSupport {
 	public String toLoginPage() {
 		return "toLoginPage";
 	}
-	
+
 	public String login() {
-		if(user != null) {
-			if(StringUtils.isNotBlank(user.getAccount()) && StringUtils.isNotBlank(user.getPassword()) ) {
-				List<User> list = userService.findUsersByAccountAndPassword(user.getAccount(), user.getPassword());
-				System.out.println("账号 ＝ " + user.getAccount() + "， 密码 ＝ " + user.getPassword() + "，个数 ＝ " + list.size());
-				
-				if(list != null && list.size() > 0) {
-					user = list.get(0);
-					user.setUserRoleList(userService.findUserRolesByUserId(user.getId()));
-					saveUserInSession();
-					//writeDownUserLogin();
-					return "loginSuccess";
-				} else { 
-					loginResult = "帐号或密码不正确！";
-				}
-			} else {
-				loginResult = "帐号或密码不能为空！";
-			}
-		} else {
-			loginResult = "请输入帐号和密码！";
-		}
+		if (isQualifiedToLogin()) {
+			user.setUserRoleList(userService.findUserRolesByUserId(user.getId()));
+			saveUserInSession();
+
+			return "loginSuccess";
+		} 
+
 		return toLoginPage();
 	}
-	
+
 	public String toNoPrivilegePage() {
 		return "toNoPrivilegePage";
 	}
 	
 	public String logout() {
 		removeUserFromSession();
+		
 		return toLoginPage();
+	}
+	
+	private boolean isQualifiedToLogin() {
+		if (user == null) {
+			loginResult = "请输入帐号和密码！";
+			return false;
+		}
+		
+		if (StringUtils.isBlank(user.getAccount()) || StringUtils.isBlank(user.getPassword())) {
+			loginResult = "帐号或密码不能为空！";
+			return false;
+		}
+		
+		List<User> list = userService.findUsersByAccountAndPassword(user.getAccount(), user.getPassword());
+		System.out.println("账号 ＝ " + user.getAccount() + "， 密码 ＝ " 
+		+ user.getPassword() + "，个数 ＝ " + list.size());
+		if(list == null || list.size() == 0) {
+			loginResult = "帐号或密码不正确！";
+			return false;
+		} 
+		user = list.get(0);
+		
+		return true;
 	}
 	
 	private void removeUserFromSession() {
@@ -67,8 +80,9 @@ public class LoginAction extends ActionSupport {
 	}
 	
 	private void saveUserInSession() {
-		ServletActionContext.getRequest().getSession().setMaxInactiveInterval(1 * 60); // 以秒为单位
-		ServletActionContext.getRequest().getSession().setAttribute(Constant.USER, user);
+		HttpSession session = ServletActionContext.getRequest().getSession();
+		session.setMaxInactiveInterval(Constant.SESSION_INACTIVE_INTERVAL); 
+		session.setAttribute(Constant.USER, user);
 	}
 	
 	@SuppressWarnings("unused")

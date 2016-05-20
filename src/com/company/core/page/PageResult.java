@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 分页数据的封装，
+ * 总条数、每页条数、总页数、当前页号、数据列表
  * @author Dongfuming
  * @date 2016-5-16 下午2:31:07
  */
@@ -66,5 +68,4 @@ public class PageResult {
 				+ ", 总页数=" + totalPageCount + ", 每页大小="
 				+ pageSize + ", 当前页数据大小=" + items.size() + "]";
 	}
-
 }

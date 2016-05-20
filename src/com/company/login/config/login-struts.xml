@@ -18,7 +18,6 @@
 			<result name="loginSuccess" type="redirectAction">
 				<param name="actionName">toSystemHomePage</param>
 				<param name="namespace">/system/home</param>
-				<!-- <param name="method">toSystemHomePage</param> -->
 			</result>
 			
 		</action>

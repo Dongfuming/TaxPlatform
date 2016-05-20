@@ -24,10 +24,6 @@ public class User {
 	private String memo;
 	private List<UserRole> userRoleList; // 一个用户，多个角色
 	
-	//用户状态
-	public static String USER_STATE_VALID = "1";//有效
-	public static String USER_STATE_INVALID = "0";//无效
-	
 	public User() { }
 	
 	public User(String id, String dept, String account, String name, String password, String headImg, 
@@ -132,5 +128,4 @@ public class User {
 				+ ", mobile=" + mobile + ", email=" + email + ", birthday="
 				+ birthday + ", memo=" + memo + "]";
 	}
-	
 }

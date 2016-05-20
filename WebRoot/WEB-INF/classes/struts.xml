@@ -32,6 +32,8 @@
 	
 	<!-- 配置全局结果及异常映射 -->
 	<package name="base-package" extends="struts-default">
+		<!-- 因为是开发学习，故先把这些注释掉 -->
+		
 		<!-- 返回结果类型 -->
 		<!-- <result-types>
 			<result-type name="systemErrorType" class="com.company.core.action.SystemResultAction"></result-type>

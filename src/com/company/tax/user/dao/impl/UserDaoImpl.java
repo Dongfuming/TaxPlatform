@@ -51,6 +51,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		String hql = "FROM UserRole WHERE compositeUserRole.userId = ?";
 		Query query = this.getSession().createQuery(hql);
 		query.setParameter(0, userId);
+		
 		return query.list();
 	}
 
@@ -62,6 +63,7 @@ public class UserDaoImpl extends BaseDaoImpl<User> implements UserDao {
 		Query query = this.getSession().createQuery(hql);
 		query.setParameter(0, account);
 		query.setParameter(1, password);
+		
 		return query.list();
 	}
 }

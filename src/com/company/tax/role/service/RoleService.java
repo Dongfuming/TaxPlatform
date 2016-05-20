@@ -1,8 +1,5 @@
 package com.company.tax.role.service;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.company.core.service.BaseService;
 import com.company.tax.role.entity.Role;
 
@@ -12,13 +9,4 @@ import com.company.tax.role.entity.Role;
  */
 public interface RoleService extends BaseService<Role> { 
 
-	public void save(Role role);
-
-	public void update(Role role);
-
-	public void delete(Serializable roleId);
-
-	public Role findRoleById(Serializable roleId);
-	
-	public List<Role> findRoles();
 }

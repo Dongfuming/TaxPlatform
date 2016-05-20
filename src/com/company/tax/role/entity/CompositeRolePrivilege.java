@@ -44,16 +44,19 @@ public class CompositeRolePrivilege implements Serializable {
 	}
 	
 	@Override
-	public boolean equals(Object obj) { // 比较privilege和role
+	public boolean equals(Object obj) { 
 		if (this == obj) {
 			return true;
 		}
+		
 		if (obj == null) {
 			return false;
 		}
+		
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
+		
 		CompositeRolePrivilege other = (CompositeRolePrivilege) obj;
 		if (privilege == null) {
 			if (other.privilege != null) {
@@ -62,6 +65,7 @@ public class CompositeRolePrivilege implements Serializable {
 		} else if (!privilege.equals(other.privilege)) {
 			return false;
 		}
+		
 		if (role == null) {
 			if (other.role != null) {
 				return false;
@@ -69,6 +73,7 @@ public class CompositeRolePrivilege implements Serializable {
 		} else if (!role.equals(other.role)) {
 			return false;
 		}
+		
 		return true;
 	}
 }

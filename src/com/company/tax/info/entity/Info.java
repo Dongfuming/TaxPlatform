@@ -1,8 +1,6 @@
 package com.company.tax.info.entity;
 
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 信息实体
@@ -21,24 +19,10 @@ public class Info {
 	private Timestamp createTime; // 创建时间 
 	private String state; // 状态
 	
-	public static String INFO_STATE_PUBLIC = "1";// 发布
-	public static String INFO_STATE_STOP = "0";// 停用
-	public static String INFO_TYPE_NOTICE = "notice"; // 通知公告
-	public static String INFO_TYPE_POLICY= "policy"; // 政策速递
-	public static String INFO_TYPE_GUIDE = "guide"; // 纳税指导
-	
-	public static Map<String, String> INFO_TYPE_MAP;
-	
-	static {
-		INFO_TYPE_MAP = new HashMap<String, String>();
-		INFO_TYPE_MAP.put(INFO_TYPE_NOTICE, "通知公告");
-		INFO_TYPE_MAP.put(INFO_TYPE_POLICY, "政策速递");
-		INFO_TYPE_MAP.put(INFO_TYPE_GUIDE, "纳税指导");
-	}
-	
 	public Info() { }
 	
-	public Info(String infoId, String type, String source, String title, String content, String memo, String creator, Timestamp createTime, String state) {
+	public Info(String infoId, String type, String source, String title, String content,
+			String memo, String creator, Timestamp createTime, String state) {
 		this.infoId = infoId;
 		this.type = type;
 		this.source = source;

@@ -14,6 +14,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.company.core.action.BaseAction;
+import com.company.core.constant.Constant;
+import com.company.core.util.HttpServletUtil;
 import com.company.core.util.QueryHelper;
 import com.company.tax.role.entity.Role;
 import com.company.tax.role.service.RoleService;
@@ -45,30 +47,22 @@ public class UserAction extends BaseAction {
 	private String userExcelContentType;
 	private String userExcelFileName;
 	
-	public String listUser() { // 查
-		QueryHelper queryHelper = new QueryHelper(User.class, "u");
-		try {
-			if (user != null && StringUtils.isNotBlank(user.getName())) { // 搜索
-				user.setName(URLDecoder.decode(user.getName(), "utf-8"));
-				queryHelper.addCondition("u.name like ?", "%" + user.getName() + "%");
-			}
-			pageResult = userService.getPageResult(queryHelper, getPageNo(), getPageSize());
-			// 2016-05-16疑问: pageResult.getItems的元素是Object类型，在JSP页面用<s:iterator>标签
-			// 却可以迭代出User类型对象，<s:property>可以直接用User的属性，何解？？？ 反射吗？
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public String listUser() { 
+		transferDataOfPageResult();
+		
 		return "listUser";
 	}
-	
-	public String addUser() { // 增
+
+	public String addUser() { 
 		saveUserHeadImg();
 		userService.saveUserAndRoles(user, roleIdArray);
+		
 		return "addUserSuccess";
 	}
 
 	public String toAddUserPage() {
 		transferDataOfRoleList();
+		
 		return "toAddUserPage";
 	}
 	
@@ -76,40 +70,44 @@ public class UserAction extends BaseAction {
 		searchContent = user.getName();
 		transferDataOfRoleList();
 		transferDataOfRoleIdArray();
-		user = userService.findUserById(user.getId());
+		user = userService.findObjectById(user.getId());
+		
 		return "toEditUserPage";
 	}
 	
-	public String editUser() { // 改
+	public String editUser() { 
 		saveUserHeadImg();
 		userService.updateUserAndRoles(user, roleIdArray);
 		return "editUserSuccess";
 	}
 
-	public String deleteUser() { // 删
+	public String deleteUser() { 
 		searchContent = user.getName();
 		userService.delete(user.getId());
+		
 		return "deleteUserSuccess";
 	}
 	
-	public String deleteSelectedUser() { // 批量删除
+	public String deleteSelectedUser() { 
 		searchContent = user.getName();
 		for (String userId : selectedRow) {
 			userService.delete(userId);
 		}
+		
 		return "deleteSelectedUserSuccess";
 	}
 	
-	public void exportUserExcel() { // 导出
+	public void exportUserExcel() { 
 		try {
-			List<User> userList = userService.findUsers();
+			List<User> userList = userService.findObjects();
 			
 			HttpServletResponse response = ServletActionContext.getResponse();
 			response.setContentType("application/x-execl");
-			String fileName = new String("用户列表.xls".getBytes(), "ISO-8859-1");
+			String fileName = new String(Constant.USER_EXCEL_FILE_NAME.getBytes(), "ISO-8859-1");
 			response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
 			ServletOutputStream outputStream = response.getOutputStream();
 			userService.exportUserExcel(userList, outputStream);
+			
 			if(outputStream != null) {
 				outputStream.close();
 			}
@@ -118,46 +116,63 @@ public class UserAction extends BaseAction {
 		}
 	}
 
-	public String importUserExcel() { // 导入
-		System.out.println("excel文件名 = " + userExcelFileName);
-		System.out.println("excel文件类型 = " + userExcelContentType);
-		
+	public String importUserExcel() { 
 		if(userExcel != null) {
 			if(userExcelFileName.matches("^.+\\.(?i)((xls)|(xlsx))$")) {
 				userService.importUserExcel(userExcel, userExcelFileName);
 			}
 		}
+		
 		return "importUserSuccess";
 	}
 	
-	public void verifyUserAccount() { // 校验帐号
+	/*
+	 * ajax校验帐号:
+	 * 检查数据库中是否已存在此账号,
+	 * 如果是编辑的话，应把当前用户id排除后再查找
+	 */
+	public void verifyUserAccount() { 
 		try {
-			if(user != null && StringUtils.isNotBlank(user.getAccount())){
-				// 检查数据库中是否已存在此账号 (如果是编辑的话，应把当前用户id排除后再查找)
+			if(user != null && StringUtils.isNotBlank(user.getAccount())) {
 				List<User> list = userService.findUserByAccountAndId(user.getId(), user.getAccount());
-				System.out.println("已存在的" + user.getAccount() + "用户个数 = " + list.size());
 				String unique = "true";
 				if(list != null && list.size() > 0) {
 					unique = "false";
 				}
 
-				HttpServletResponse response = ServletActionContext.getResponse();
-				response.setContentType("text/html; charset=utf-8");
-				ServletOutputStream outputStream = response.getOutputStream();
-				outputStream.write(unique.getBytes());
-				outputStream.close();
+				HttpServletUtil.writeOutStream(unique);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 	
+	/****************** private method ******************/
+	private void transferDataOfPageResult() {
+		QueryHelper queryHelper = new QueryHelper(User.class, "u");
+		try {
+			if (user != null && StringUtils.isNotBlank(user.getName())) { 
+				user.setName(URLDecoder.decode(user.getName(), "utf-8"));
+				queryHelper.addCondition("u.name like ?", "%" + user.getName() + "%");
+			}
+			pageResult = userService.getPageResult(queryHelper, getPageNo(), getPageSize());
+			// 2016-05-16 dfm疑问: pageResult.getItems的元素是Object类型，在JSP页面用<s:iterator>标签
+			// 却可以迭代出User类型对象，<s:property>可以直接用User的属性，何解？？？ 反射吗？
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/*
+	 * 用struts上传图片文件，
+	 * 保存在服务器文件夹里 (服务器安装路径/TaxPlatform/upload/user)
+	 */
 	private void saveUserHeadImg() {
 		try {
 			if(headImg != null) {
-				// 保存在服务器文件里 /Library/Java/tomcat/webapps/TaxPlatform/upload/user
 				String filePath = ServletActionContext.getServletContext().getRealPath("upload/user");
-				String fileName = UUID.randomUUID().toString().replaceAll("-", "") + headImgFileName.substring(headImgFileName.lastIndexOf("."));
+				String fileName = UUID.randomUUID().toString().replaceAll("-", "");
+				fileName = fileName + headImgFileName.substring(headImgFileName.lastIndexOf("."));
 				FileUtils.copyFile(headImg, new File(filePath, fileName));
 				
 				user.setHeadImg("user/" + fileName); 
@@ -178,10 +193,11 @@ public class UserAction extends BaseAction {
 	}
 	
 	private void transferDataOfRoleList() {
-		List<Role> roleList = roleService.findRoles();
+		List<Role> roleList = roleService.findObjects();
 		ActionContext.getContext().getContextMap().put("roleList", roleList);
 	}
 
+	/****************** setter / getter ******************/
 	public void setUser(User user) {
 		this.user = user;
 	}

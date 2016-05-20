@@ -18,7 +18,16 @@ import com.company.core.constant.Constant;
 import com.company.tax.user.entity.User;
 
 /**
- * 用户访问‘纳税服务’时的权限的判断
+ * 登录及权限过滤器：
+ * 在用HTTP请求后台时，需要判断用户有没有登录，且登录后有没有‘纳税管理’的访问权限，
+ * 1. 若是登录请求，则直接放行，进入到登录页面；
+ * 2. 若非登录请求，判断用户是否已经登录：
+ * 2.1 若未登录，重定向到登录页面；
+ * 2.2 若已登录，判断是否是‘纳税服务’的访问请求：
+ * 2.2.1 若非‘纳税服务’的请求，则直接放行；
+ * 2.2.2 若是‘纳税服务’的请求，判断是否有访问权限：
+ * 2.2.2.1 若有访问权限，则直接放行
+ * 2.2.2.2 若无访问权限，提示无权限
  * @author Dongfuming
  * @date 2016-5-13 下午5:56:44
  */
@@ -42,10 +51,10 @@ public class LoginFilter implements Filter {
 				if (uri.contains("/tax")) { // 访问纳税服务
 					User user = (User)request.getSession().getAttribute(Constant.USER);
 					ServletContext context = request.getSession().getServletContext();
-					// 获取spring容器
 					WebApplicationContext applicationContext = WebApplicationContextUtils.getWebApplicationContext(context);
 					UserPrivilegeChecker checker = (UserPrivilegeChecker)applicationContext.getBean("userPrivilegeChecker");
-					if(checker.isPrivilegeAccessible(user, Constant.PRIVILEGE_TAX)) {
+					
+					if(checker.isPrivilegeAccessible(user, Constant.PRIVILEGE_TAX)) { // 有权限
 						chain.doFilter(request, response);
 					} else { // 无权限 
 						response.sendRedirect(request.getContextPath() + "/system/login/toNoPrivilegePage.action");

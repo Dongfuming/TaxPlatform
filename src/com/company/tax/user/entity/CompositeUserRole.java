@@ -50,12 +50,15 @@ public class CompositeUserRole implements Serializable {
 		if (this == obj) {
 			return true;
 		}
+		
 		if (obj == null) {
 			return false;
 		}
+		
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
+		
 		CompositeUserRole other = (CompositeUserRole) obj;
 		if (userId == null) {
 			if (other.userId != null) {
@@ -64,6 +67,7 @@ public class CompositeUserRole implements Serializable {
 		} else if (!userId.equals(other.userId)) {
 			return false;
 		}
+		
 		if (role == null) {
 			if (other.role != null) {
 				return false;
@@ -71,6 +75,7 @@ public class CompositeUserRole implements Serializable {
 		} else if (!role.equals(other.role)) {
 			return false;
 		}
+		
 		return true;
 	}
 }

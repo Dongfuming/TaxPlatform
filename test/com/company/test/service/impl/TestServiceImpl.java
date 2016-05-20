@@ -39,6 +39,7 @@ public class TestServiceImpl implements TestService {
 	public Person findPersonById(Serializable id) {
 		savePerson(new Person("test"));  // find* readonly=true, 抛事务异常且save失败
 		Person person = testDao.findPersonById(id);
+		
 		return person;
 	}
 

@@ -13,13 +13,15 @@ import com.company.core.page.PageResult;
 import com.company.core.util.QueryHelper;
 
 /**
- * BaseDao实现类
+ * BaseDao实现，
+ * 因继承的HibernateDaoSupport已经有sessionFactory属性，
+ * 故子类需要在spring.xml文件中注入sessionFactory数据，才能操作数据库
  * @author Dongfuming
  * @date 2016-5-9 上午11:11:07
  */
 public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
-	
-	private Class<T> clazz;
+
+	private Class<T> clazz; 
 	
 	@SuppressWarnings("unchecked")
 	public BaseDaoImpl() {
@@ -55,6 +57,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 	public List<T> findObjects() {
 		Query query = this.getSession().createQuery("FROM " + clazz.getSimpleName());
 		List<T> list = query.list();
+		
 		return list;
 	}
 
@@ -67,6 +70,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 				query.setParameter(i, parameters.get(i));
 			}
 		}
+		
 		return query.list();
 	}
 
@@ -81,7 +85,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 				query.setParameter(i, parameters.get(i));
 			}
 		}
-		System.out.println("findObjects hql = " + queryHelper.getQueryListHql());
+		
 		return query.list();
 	}
 
@@ -91,7 +95,7 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 			int pageSize) {
 		// 查询分页里列表数据
 		String hql = queryHelper.getQueryListHql();
-		System.out.println("查询分页列表的hql = " + hql);
+		System.out.println("\n查询分页列表的hql = " + hql);
 		
 		Query query = this.getSession().createQuery(hql);
 		List<Object> parameters = queryHelper.getParameters();
@@ -100,9 +104,6 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 				query.setParameter(i, parameters.get(i));
 			}
 		}
-//		if (pageNo < 1) {
-//			pageNo = 1;
-//		}
 		query.setFirstResult((pageNo - 1) * pageSize);
 		query.setMaxResults(pageSize);
 		List<Object> items = query.list();
@@ -118,7 +119,8 @@ public class BaseDaoImpl<T> extends HibernateDaoSupport implements BaseDao<T> {
 			}
 		}
 		long totalCount = (Long)query.uniqueResult();
-
-		return new PageResult(totalCount, pageNo, pageSize, items);
+		PageResult pageResult = new PageResult(totalCount, pageNo, pageSize, items);
+		
+		return pageResult;
 	}
 }

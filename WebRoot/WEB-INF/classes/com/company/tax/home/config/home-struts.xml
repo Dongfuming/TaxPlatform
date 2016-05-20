@@ -12,10 +12,6 @@
 		
 			<result name="toTaxHomePage">/jsp/tax/home/home.jsp</result>
 			
-			<result name="toTaxHomePageTop">/jsp/tax/home/top.jsp</result>
-			
-			<result name="toTaxHomePageLeft">/jsp/tax/home/left.jsp</result>
-			
 		</action>
 		
 	</package>

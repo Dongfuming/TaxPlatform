@@ -5,7 +5,7 @@ import com.company.core.page.PageResult;
 import com.opensymphony.xwork2.ActionSupport;
 
 /**
- * 此Action适合于列表显示页面,
+ * 此Action适用于列表显示页,
  * 可查询分页数据，数据封装在pageResult中，
  * 可删除选中的行，行数保存在selectedRow中，
  * @author Dongfuming

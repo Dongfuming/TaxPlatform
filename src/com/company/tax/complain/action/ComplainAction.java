@@ -1,11 +1,10 @@
 package com.company.tax.complain.action;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.sql.Timestamp;
-import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -16,6 +15,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.company.core.action.BaseAction;
+import com.company.core.constant.Constant;
 import com.company.core.util.QueryHelper;
 import com.company.tax.complain.entity.Complain;
 import com.company.tax.complain.entity.ComplainReply;
@@ -45,12 +45,14 @@ public class ComplainAction extends BaseAction {
 	public String listComplain() throws Exception {
 		transferDataOfPageResult();
 		transferDataOfComplainStateMap();
+		
 		return "listComplain";
 	}
 
 	public String toDealComplainPage() {
 		complain = complainService.findObjectById(complain.getCompId());
 		transferDataOfComplainStateMap();
+		
 		return "toDealComplainPage";
 	}
 
@@ -58,6 +60,7 @@ public class ComplainAction extends BaseAction {
 		complain = complainService.findObjectById(complain.getCompId());
 		updateComplainState();
 		saveComplainReply();
+		
 		return "dealComplainSuccess";
 	}
 
@@ -68,21 +71,25 @@ public class ComplainAction extends BaseAction {
 	public String getYearStatisticData() throws Exception {
 		HttpServletRequest request = ServletActionContext.getRequest();
 		int year = Integer.valueOf(request.getParameter("year")).intValue();
+		List<Map<String, Object>> list = complainService.getYearStatisticDataByYear(year);
+		
 		statisticMap = new HashMap<String, Object>();
 		statisticMap.put("msg", "success");
-		statisticMap.put("chartData", complainService.getYearStatisticDataByYear(year));
+		statisticMap.put("chartData", list);
+		
 		return "yearStatisticData";
 	}
 	
 	private void transferDataOfComplainStateMap() {
-		ActionContext.getContext().getContextMap().put("complainStateMap", Complain.COMPLAIN_STATE_MAP);
+		ActionContext.getContext().getContextMap().put("complainStateMap", Constant.COMPLAIN_STATE_MAP);
 	}
 	
 	private void transferDataOfPageResult() throws Exception {
 		QueryHelper queryHelper = new QueryHelper(Complain.class, "c");
 		addConditionWithQueryHelper(queryHelper);
-		queryHelper.addOrderByProperty("c.state", QueryHelper.ORDER_BY_ASC);
-		queryHelper.addOrderByProperty("c.compTime", QueryHelper.ORDER_BY_ASC);
+		queryHelper.addOrderByProperty("c.state", Constant.ORDER_BY_ASC);
+		queryHelper.addOrderByProperty("c.compTime", Constant.ORDER_BY_ASC);
+		
 		pageResult = complainService.getPageResult(queryHelper, getPageNo(), getPageSize());
 	}
 	
@@ -92,10 +99,12 @@ public class ComplainAction extends BaseAction {
 			startTime = URLDecoder.decode(startTime, "utf-8");
 			queryHelper.addCondition("c.compTime >= ?", DateUtils.parseDate(startTime+":00", "yyyy-MM-dd HH:mm:ss"));
 		}
+		
 		if(StringUtils.isNotBlank(endTime)) {
 			endTime = URLDecoder.decode(endTime, "utf-8");
 			queryHelper.addCondition("c.compTime <= ?", DateUtils.parseDate(endTime+":59", "yyyy-MM-dd HH:mm:ss"));
 		}
+		
 		if (complain != null) { 
 			if(StringUtils.isNotBlank(complain.getCompTitle())){
 				queryHelper.addCondition("c.compTitle like ?", "%" + complain.getCompTitle() + "%");
@@ -114,8 +123,8 @@ public class ComplainAction extends BaseAction {
 	}
 
 	private void updateComplainState() {
-		if ( ! Complain.COMPLAIN_STATE_DONE.equals(complain.getState())) {
-			complain.setState(Complain.COMPLAIN_STATE_DONE);
+		if ( ! Constant.COMPLAIN_STATE_DONE.equals(complain.getState())) {
+			complain.setState(Constant.COMPLAIN_STATE_DONE);
 		}
 	}
 	

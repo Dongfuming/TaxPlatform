@@ -23,7 +23,7 @@
 	    			data:{"dept":dept},
 	    			type:"post",
 	    			dataType:"json",//返回数据类型
-	    			success: function(data){
+	    			success: function(data) {
 	    				//2.1、将用户列表设置到被投诉人下拉框中
 	    				if(data != null && data != "" && data != undefined){
 	    					if("success" == data.msg){
@@ -61,9 +61,9 @@
 						window.opener.parent.location.reload(true);
 			    		//4、关闭当前窗口
 			    		window.close();
-					} else {alert("投诉失败！");}
+					} else {alert("投诉失败！111");}
 				},
-				error: function(){alert("投诉失败！");}
+				error: function(){alert("投诉失败！222");}
 			});
     	}
     </script>

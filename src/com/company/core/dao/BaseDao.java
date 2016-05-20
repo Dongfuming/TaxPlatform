@@ -7,7 +7,7 @@ import com.company.core.page.PageResult;
 import com.company.core.util.QueryHelper;
 
 /**
- * BaseDao接口
+ * BaseDao接口，增、删、改、查
  * @author Dongfuming
  * @date 2016-5-9 上午11:02:32
  */

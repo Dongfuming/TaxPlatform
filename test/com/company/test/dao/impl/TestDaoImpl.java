@@ -20,7 +20,6 @@ public class TestDaoImpl extends HibernateDaoSupport implements TestDao {
 
 	@Override
 	public Person findPersonById(Serializable id) {
-		Person person = this.getHibernateTemplate().get(Person.class, id);
-		return person;
+		return this.getHibernateTemplate().get(Person.class, id);
 	}
 }

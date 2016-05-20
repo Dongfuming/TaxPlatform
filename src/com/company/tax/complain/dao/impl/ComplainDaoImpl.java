@@ -1,8 +1,9 @@
 package com.company.tax.complain.dao.impl;
 
 import java.util.List;
-import java.util.Map;
+
 import org.hibernate.SQLQuery;
+
 import com.company.core.dao.impl.BaseDaoImpl;
 import com.company.tax.complain.dao.ComplainDao;
 import com.company.tax.complain.entity.Complain;
@@ -23,6 +24,7 @@ public class ComplainDaoImpl extends BaseDaoImpl<Complain> implements ComplainDa
 		.append(" AND YEAR(comp_time)=?")
 		.append(" GROUP BY the_month ")
 		.append(" ORDER BY the_month");
+		
 		SQLQuery sqlQuery = this.getSession().createSQLQuery(sb.toString());
 		sqlQuery.setParameter(0, year);
 		

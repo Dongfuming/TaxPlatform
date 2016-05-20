@@ -10,12 +10,4 @@ public class HomeAction {
 	public String toTaxHomePage(){
 		return "toTaxHomePage";
 	}
-	
-	public String toTaxHomePageTop(){
-		return "toTaxHomePageTop";
-	}
-	
-	public String toTaxHomePageLeft(){
-		return "toTaxHomePageLeft";
-	}
 }

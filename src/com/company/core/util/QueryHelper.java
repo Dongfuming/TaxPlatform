@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * 查询语句工具类
  * @author Dongfuming
  * @date 2016-5-16 下午1:55:32
  */
@@ -14,9 +15,6 @@ public class QueryHelper {
 	private String orderByClause = ""; // order by子句
 	private List<Object> parameters; // 查询条件值集合
 
-	public static String ORDER_BY_DESC = "DESC"; // 降序
-	public static String ORDER_BY_ASC = "ASC"; // 升序
-	
 	/**
 	 * 构造from子句
 	 * @param clazz 实体类
@@ -62,7 +60,7 @@ public class QueryHelper {
 		}
 	}
 
-	// 查询hql语句
+	// 查询列表hql语句
 	public String getQueryListHql(){
 		return fromClause + whereClause + orderByClause;
 	}

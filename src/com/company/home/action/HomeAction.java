@@ -1,17 +1,12 @@
 package com.company.home.action;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONObject;
 
@@ -19,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.struts2.ServletActionContext;
 
 import com.company.core.constant.Constant;
+import com.company.core.util.HttpServletUtil;
 import com.company.core.util.QueryHelper;
 import com.company.tax.complain.entity.Complain;
 import com.company.tax.complain.service.ComplainService;
@@ -55,19 +51,21 @@ public class HomeAction extends ActionSupport {
 	public String toSystemHomePage() {
 		transferDataOfInfoList();
 		transferDataOfComplainList();
+		
 		return "toSystemHomePage";
 	}
 	
 	public String toInfoDetailPage() {
 		info = infoService.findObjectById(info.getInfoId());
 		transferDataOfInfoTypeMap();
+		
 		return "toInfoDetailPage";
 	}
 	
 	public String toComplainDetailPage() {
 		complain = complainService.findObjectById(complain.getCompId());
 		transferDataOfComplainStateMap();
-		System.out.println("点击的投诉 ＝ " + complain);
+		
 		return "toComplainDetailPage";
 	}
 	
@@ -76,11 +74,11 @@ public class HomeAction extends ActionSupport {
 	}
 	
 	public void addComplain() { 
-		complain.setState(Complain.COMPLAIN_STATE_UNDONE);
+		complain.setState(Constant.COMPLAIN_STATE_UNDONE);
 		complain.setCompTime(new Timestamp(new Date().getTime()));
 		complainService.save(complain);
 		
-		writeOutStream("success");
+		HttpServletUtil.writeOutStream("success");
 	}
 	
 	// 方式1：输出流输出json文本
@@ -93,7 +91,7 @@ public class HomeAction extends ActionSupport {
 			jsonObject.put("msg", "success");
 			jsonObject.accumulate("userList", userList);
 
-			writeOutStream(jsonObject.toString());
+			HttpServletUtil.writeOutStream(jsonObject.toString());
 		}
 	}
 
@@ -107,20 +105,21 @@ public class HomeAction extends ActionSupport {
 			jsonMap.put("msg", "success");
 			jsonMap.put("userList", userList);
 		}
+		
 		return SUCCESS;
 	}
 
 	private void transferDataOfInfoList() {
-		ActionContext.getContext().getContextMap().put("infoTypeMap", Info.INFO_TYPE_MAP);
+		ActionContext.getContext().getContextMap().put("infoTypeMap", Constant.INFO_TYPE_MAP);
 		QueryHelper queryHelper1 = new QueryHelper(Info.class, "i");
-		queryHelper1.addOrderByProperty("i.createTime", QueryHelper.ORDER_BY_DESC);
+		queryHelper1.addOrderByProperty("i.createTime", Constant.ORDER_BY_DESC);
 		List<Object> infoList = infoService.getPageResult(queryHelper1, 1, 5).getItems();
 		
 		ActionContext.getContext().getContextMap().put("infoList", infoList);
 	}
 	
 	private void transferDataOfComplainStateMap() {
-		ActionContext.getContext().getContextMap().put("complainStateMap", Complain.COMPLAIN_STATE_MAP);
+		ActionContext.getContext().getContextMap().put("complainStateMap", Constant.COMPLAIN_STATE_MAP);
 	}
 	
 	private void transferDataOfComplainList() {
@@ -128,8 +127,8 @@ public class HomeAction extends ActionSupport {
 		
 		QueryHelper queryHelper = new QueryHelper(Complain.class, "c");
 		queryHelper.addCondition("c.compName = ?", user.getName());
-		queryHelper.addOrderByProperty("c.compTime", QueryHelper.ORDER_BY_ASC);
-		queryHelper.addOrderByProperty("c.state", QueryHelper.ORDER_BY_DESC);
+		queryHelper.addOrderByProperty("c.compTime", Constant.ORDER_BY_DESC);
+		queryHelper.addOrderByProperty("c.state", Constant.ORDER_BY_DESC);
 		List<Object> complainList = complainService.getPageResult(queryHelper, 1, 6).getItems();
 		
 		ActionContext.getContext().getContextMap().put("complainList", complainList);
@@ -137,25 +136,14 @@ public class HomeAction extends ActionSupport {
 	}
 	
 	private void transferDataOfInfoTypeMap() {
-		ActionContext.getContext().getContextMap().put("infoTypeMap", Info.INFO_TYPE_MAP);
-	}
-	
-	private void writeOutStream(String objString) {
-		try {
-			HttpServletResponse response = ServletActionContext.getResponse();
-			response.setContentType("text/html");
-			ServletOutputStream outputStream = response.getOutputStream();
-			outputStream.write(objString.getBytes("utf-8"));
-			outputStream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} 
+		ActionContext.getContext().getContextMap().put("infoTypeMap", Constant.INFO_TYPE_MAP);
 	}
 	
 	private List<User> getUserListWithDept(String dept) {
 		QueryHelper queryHelper = new QueryHelper(User.class, "u"); 
 		queryHelper.addCondition("u.dept = ?", dept); 
 		List<User> userList = userService.findObjects(queryHelper);
+		
 		return userList;
 	}
 	

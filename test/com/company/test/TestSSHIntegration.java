@@ -60,7 +60,7 @@ public class TestSSHIntegration {
 		TestService testService = (TestService)context.getBean("testService");
 		// 在find函数中加了save操作
 		// spring配置了事务管理，find* readonly=true, 
-		// 结果应该是抛出nvalidDataAccessApiUsageException，且save失败
+		// 结果应该是抛出invalidDataAccessApiUsageException，且save失败
 		Person person = testService.findPersonById("4028b2ac54857ef10154857ef2260000");
 		System.out.println(person.getName() + ", " + person.getId());
 	}

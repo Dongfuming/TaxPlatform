@@ -14,10 +14,6 @@ public class Role {
 	private String state;
 	private Set<RolePrivilege> rolePrivilegeSet; // 一个角色含多个权限
 	
-	//角色状态
-	public static String ROLE_STATE_VALID = "1";//有效
-	public static String ROLE_STATE_INVALID = "0";//无效
-	
 	public Role() { }
 
 	public Role(String id) {

@@ -1,8 +1,5 @@
 package com.company.tax.info.service;
 
-import java.io.Serializable;
-import java.util.List;
-
 import com.company.core.service.BaseService;
 import com.company.tax.info.entity.Info;
 
@@ -13,13 +10,4 @@ import com.company.tax.info.entity.Info;
  */
 public interface InfoService extends BaseService<Info> {
 
-	public void save(Info info);
-
-	public void update(Info info);
-
-	public void delete(Serializable id);
-
-	public Info findInfoById(Serializable id);
-
-	public List<Info> findInfos();
 }
